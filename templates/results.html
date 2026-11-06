@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% block title %}Recommendations for {{ query_movie.title }} - CineMatch AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Query Movie Spotlight Card with Backdrop & Poster -->
+    <div class="query-spotlight-card mb-5 position-relative overflow-hidden">
+        
+        {% if query_movie.backdrop_url %}
+        <div class="spotlight-backdrop-bg" style="background-image: url('{{ query_movie.backdrop_url }}');"></div>
+        {% endif %}
+        
+        <div class="row align-items-center g-4 position-relative z-2">
+            
+            <!-- Poster -->
+            <div class="col-md-3 text-center">
+                <div class="spotlight-poster-frame rounded-3 shadow-lg overflow-hidden mx-auto" style="max-width: 200px;">
+                    {% if query_movie.poster_url %}
+                    <img src="{{ query_movie.poster_url }}" alt="{{ query_movie.title }}" class="w-100 spotlight-poster-img" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">
+                    {% endif %}
+                    <div class="poster-svg-fallback {% if query_movie.poster_url %}d-none{% endif %}">
+                        <i class="fa-solid fa-film text-cyan fs-1 mb-2"></i>
+                        <span class="fs-xs fw-bold text-white text-center px-2">{{ query_movie.title }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Details -->
+            <div class="col-md-9">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                    <span class="badge bg-cyan-subtle text-cyan fs-xs px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-crosshairs me-1"></i> Query Movie
+                    </span>
+                    
+                    {% if is_ml %}
+                    <span class="badge bg-secondary-subtle text-light fs-xs px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-diagram-project me-1 text-cyan"></i> Thematic Cluster #{{ cluster_used }} ({{ total_cluster_movies }} films)
+                    </span>
+                    {% else %}
+                    <span class="badge bg-secondary-subtle text-warning fs-xs px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-globe me-1"></i> Live TMDB Discovery
+                    </span>
+                    {% endif %}
+                    
+                    <span class="badge bg-secondary-subtle text-warning fs-xs px-3 py-2 rounded-pill">
+                        <i class="fa-solid fa-star me-1"></i> {{ query_movie.vote_average }} / 10
+                    </span>
+                </div>
+
+                <h2 class="font-outfit fw-bold text-white display-6 mb-2">{{ query_movie.title }}</h2>
+
+                <div class="row g-2 mb-3 fs-sm text-secondary">
+                    <div class="col-sm-6">
+                        <span class="text-secondary-emphasis fw-semibold">Director:</span>
+                        <span class="text-cyan ms-1">{{ query_movie.director or 'Unknown' }}</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span class="text-secondary-emphasis fw-semibold">Genres:</span>
+                        <span class="text-light ms-1">{{ query_movie.genres_str or query_movie.genres }}</span>
+                    </div>
+                    <div class="col-12">
+                        <span class="text-secondary-emphasis fw-semibold">Key Cast:</span>
+                        <span class="text-light ms-1">{{ query_movie.cast_str or query_movie.cast }}</span>
+                    </div>
+                </div>
+
+                <p class="text-secondary fs-sm mb-4 lh-base" style="max-width: 820px;">
+                    {{ query_movie.overview }}
+                </p>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ url_for('main.explore') }}" class="btn btn-outline-cyan-subtle btn-sm rounded-pill px-4">
+                        <i class="fa-solid fa-compass me-1"></i> Explore More Films
+                    </a>
+                    <a href="{{ url_for('recommendations.recommend') }}" class="btn btn-dark-subtle btn-sm rounded-pill px-4 text-light">
+                        <i class="fa-solid fa-arrow-left me-1"></i> Search Another Movie
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations Section Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="font-outfit fw-bold text-white mb-1 d-flex align-items-center gap-2">
+                <i class="fa-solid fa-wand-magic-sparkles text-cyan fs-5"></i>
+                {% if is_ml %}
+                <span>Top {{ recommendations|length }} Machine Learning Recommendations</span>
+                {% else %}
+                <span>Top {{ recommendations|length }} Similar Movie Suggestions</span>
+                {% endif %}
+            </h3>
+            <p class="text-secondary fs-xs mb-0">
+                {% if is_ml %}
+                Ranked using Cosine Similarity on TF-IDF vectors within K-Means clusters (query film excluded).
+                {% else %}
+                Curated via TMDB's thematic and keyword similarity graph for live external films.
+                {% endif %}
+            </p>
+        </div>
+
+        {% if is_ml %}
+        <span class="badge bg-cyan-subtle text-cyan fs-xs px-3 py-2 rounded-pill">
+            <i class="fa-solid fa-brain me-1"></i> TF-IDF &bull; K-Means &bull; Cosine Similarity
+        </span>
+        {% else %}
+        <span class="badge bg-warning-subtle text-warning fs-xs px-3 py-2 rounded-pill">
+            <i class="fa-solid fa-cloud me-1"></i> API-Based Discovery
+        </span>
+        {% endif %}
+    </div>
+
+    <!-- Recommendations Grid -->
+    {% if recommendations %}
+    <div class="movie-grid-explore mb-5">
+        {% for rec in recommendations %}
+        <div class="movie-poster-card" data-movie-id="{{ rec.id }}">
+            <div class="poster-media position-relative">
+                
+                <!-- Similarity or Rating Badge -->
+                <div class="similarity-badge" title="Algorithm Score">
+                    <i class="fa-solid fa-chart-simple me-1"></i> {{ rec.similarity_label }}
+                </div>
+
+                <!-- Poster Image -->
+                {% if rec.poster_url %}
+                <img src="{{ rec.poster_url }}" alt="{{ rec.title }}" class="poster-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">
+                {% endif %}
+                <div class="poster-svg-fallback {% if rec.poster_url %}d-none{% endif %}">
+                    <i class="fa-solid fa-film text-cyan fs-1 mb-2 opacity-50"></i>
+                    <span class="fs-xs fw-bold text-white text-center px-2">{{ rec.title }}</span>
+                </div>
+
+                <!-- Hover Overlay -->
+                <div class="poster-hover-overlay">
+                    <div class="overlay-actions d-flex flex-column gap-2 p-3 w-100">
+                        <button type="button" class="btn btn-cyan btn-sm rounded-pill w-100 btn-movie-details" data-movie-id="{{ rec.id }}">
+                            <i class="fa-solid fa-circle-info me-1"></i> Details
+                        </button>
+                        
+                        {% set is_in_watchlist = (rec.id in watchlist_ids) %}
+                        <button type="button" class="btn {% if is_in_watchlist %}btn-success{% else %}btn-outline-light{% endif %} btn-sm rounded-pill w-100 btn-watchlist-toggle" 
+                                data-movie-id="{{ rec.id }}" 
+                                data-is-added="{{ 'true' if is_in_watchlist else 'false' }}">
+                            <i class="{% if is_in_watchlist %}fa-solid{% else %}fa-regular{% endif %} fa-bookmark me-1"></i> 
+                            {{ 'Saved' if is_in_watchlist else 'Watchlist' }}
+                        </button>
+                        
+                        <button type="button" class="btn btn-outline-cyan btn-sm rounded-pill w-100 btn-movie-similar" 
+                                data-movie-id="{{ rec.id }}" 
+                                data-movie-title="{{ rec.title }}">
+                            <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Similar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metadata & Explanation -->
+            <div class="poster-info pt-2 px-1">
+                <h6 class="poster-title font-outfit text-white text-truncate mb-1" title="{{ rec.title }}">{{ rec.title }}</h6>
+                <div class="d-flex align-items-center justify-content-between text-secondary fs-2xs mb-2">
+                    <span>{{ rec.release_year }} &bull; {{ rec.vote_average }} <i class="fa-solid fa-star text-warning"></i></span>
+                    <span class="badge bg-dark-subtle text-cyan fs-2xs">{{ rec.genres_str or rec.genres }}</span>
+                </div>
+
+                {% if rec.explanation %}
+                <div class="movie-explanation-box">
+                    <i class="fa-solid fa-lightbulb text-cyan me-1"></i>
+                    <span>{{ rec.explanation }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fa-solid fa-film-slash text-secondary fs-1 mb-3"></i>
+        <h4 class="text-white font-outfit">No recommendations found</h4>
+        <p class="text-secondary fs-sm mb-4">Try exploring titles from the catalog or searching another movie.</p>
+        <a href="{{ url_for('main.explore') }}" class="btn btn-cyan rounded-pill px-4">Browse Catalog</a>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

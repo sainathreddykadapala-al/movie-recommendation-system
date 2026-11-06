@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block title %}About Project - Academic Overview - CineMatch AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<style>
+    .math-block {
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(0, 240, 255, 0.2);
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        font-family: 'Courier New', monospace;
+        color: #38bdf8;
+    }
+    .workflow-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(13, 19, 33, 0.5);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        border-radius: 14px;
+        margin-bottom: 0.75rem;
+    }
+    .step-number {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(0, 240, 255, 0.15);
+        border: 1px solid var(--cyan-primary);
+        color: var(--cyan-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        flex-shrink: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Hero Header -->
+    <div class="text-center py-4 mb-4">
+        <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-cyan-subtle border-cyan-subtle text-cyan fs-xs fw-semibold mb-3">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>College Final Year Academic Project</span>
+        </div>
+        <h1 class="font-outfit fw-bold text-white display-5 mb-2">Movie Recommendation System</h1>
+        <p class="hero-tagline">
+            Using Clustering and Similarity-Based Machine Learning Techniques on the TMDB 5000 Benchmark
+        </p>
+    </div>
+
+    <!-- Core Overview Cards -->
+    <div class="row g-4 mb-5">
+        <!-- Problem Statement -->
+        <div class="col-lg-6">
+            <div class="card bg-card-dark border-subtle rounded-4 p-4 shadow-lg h-100">
+                <h4 class="font-outfit fw-bold text-white mb-3 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation text-warning"></i>
+                    <span>Problem Statement</span>
+                </h4>
+                <p class="text-secondary fs-sm lh-base mb-0">
+                    With thousands of films published across modern global streaming platforms, users face severe choice overload. Finding movies that genuinely match specific narrative preferences, genre mixtures, and thematic undertones is challenging through manual keyword queries or simple popularity rankings alone.
+                </p>
+            </div>
+        </div>
+
+        <!-- Proposed Solution -->
+        <div class="col-lg-6">
+            <div class="card bg-card-dark border-subtle rounded-4 p-4 shadow-lg h-100">
+                <h4 class="font-outfit fw-bold text-white mb-3 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-cyan"></i>
+                    <span>Proposed Solution</span>
+                </h4>
+                <p class="text-secondary fs-sm lh-base mb-0">
+                    A content-based and clustering-guided Machine Learning recommendation pipeline that ingests comprehensive textual metadata (plot overview, tagline, genres, keywords, directors, and actors). The system uses TF-IDF feature extraction, partitions movies into semantic clusters via K-Means, and ranks target films using high-dimensional Cosine Similarity.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Architecture Workflow -->
+    <div class="card bg-card-dark border-subtle rounded-4 p-4 shadow-lg mb-5">
+        <h4 class="font-outfit fw-bold text-white mb-4 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-diagram-project text-cyan"></i>
+            <span>Machine Learning End-to-End System Workflow</span>
+        </h4>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-1">Dataset Collection</h6>
+                        <p class="text-secondary fs-xs mb-0">Ingestion of TMDB 5,000 movies and credits datasets containing comprehensive metadata for 4,803 real films.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-1">Data Preprocessing</h6>
+                        <p class="text-secondary fs-xs mb-0">Inner join on movie ID, JSON string parsing for genres/keywords/cast, director isolation from crew, null imputation, and duplicate removal.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-1">Feature Engineering</h6>
+                        <p class="text-secondary fs-xs mb-0">Normalization, space collapsing for entity names (e.g., 'Christopher Nolan' &rarr; 'christophernolan'), and composition of weighted 'tags'.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-1">TF-IDF Vectorization</h6>
+                        <p class="text-secondary fs-xs mb-0">Transformation of combined tags into 5,000-dimensional sparse numerical feature vectors using scikit-learn TfidfVectorizer.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="workflow-step">
+                    <div class="step-number">5</div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-1">K-Means Clustering</h6>
+                        <p class="text-secondary fs-xs mb-0">Unsupervised grouping of movies into 12 semantic clusters to narrow candidate space and isolate topical themes.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">6</div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-1">Cosine Similarity Calculation</h6>
+                        <p class="text-secondary fs-xs mb-0">Computation of angular proximity between the query movie vector and candidates, excluding the query movie itself.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">7</div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-1">Recommendation Generation</h6>
+                        <p class="text-secondary fs-xs mb-0">Extraction of the top 10 ranked candidates with calculated similarity score percentage and dynamic shared metadata explanations.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">8</div>
+                    <div>
+                        <h6 class="text-white fw-bold mb-1">Model Persistence & Delivery</h6>
+                        <p class="text-secondary fs-xs mb-0">Serialized via Joblib for zero-delay inference through Flask RESTful routes and a responsive Three.js UI.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mathematical Foundations -->
+    <div class="card bg-card-dark border-subtle rounded-4 p-4 shadow-lg mb-5">
+        <h4 class="font-outfit fw-bold text-white mb-4 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-square-root-variable text-cyan"></i>
+            <span>Mathematical Formulations</span>
+        </h4>
+
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <h6 class="text-cyan fw-bold mb-2">1. TF-IDF Weighting</h6>
+                <p class="text-secondary fs-xs mb-2">Balances term frequency with inverse document frequency across the corpus:</p>
+                <div class="math-block fs-xs mb-2">
+                    TF-IDF(t, d, D) = TF(t, d) &times; log(N / DF(t))
+                </div>
+                <p class="text-secondary fs-2xs mb-0">Penalizes omnipresent words while emphasizing characteristic director and genre tokens.</p>
+            </div>
+
+            <div class="col-lg-4">
+                <h6 class="text-cyan fw-bold mb-2">2. K-Means Objective Function</h6>
+                <p class="text-secondary fs-xs mb-2">Minimizes within-cluster sum of squared Euclidean distances (Inertia):</p>
+                <div class="math-block fs-xs mb-2">
+                    J = &sum; &sum; || x_i - &mu;_j ||&sup2;
+                </div>
+                <p class="text-secondary fs-2xs mb-0">Clusters movies into coherent thematic domains (e.g. Action/Sci-Fi vs Drama vs Animation).</p>
+            </div>
+
+            <div class="col-lg-4">
+                <h6 class="text-cyan fw-bold mb-2">3. Cosine Similarity Metric</h6>
+                <p class="text-secondary fs-xs mb-2">Measures cosine of angle &theta; between two non-zero vectors A and B:</p>
+                <div class="math-block fs-xs mb-2">
+                    cos(&theta;) = (A &bull; B) / (||A|| &times; ||B||)
+                </div>
+                <p class="text-secondary fs-2xs mb-0">Invariant to document length, focusing purely on directional orientation in vector space.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technology Stack -->
+    <div class="card bg-card-dark border-subtle rounded-4 p-4 shadow-lg">
+        <h4 class="font-outfit fw-bold text-white mb-3 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-layer-group text-cyan"></i>
+            <span>Technology Stack</span>
+        </h4>
+        <div class="row g-3 fs-sm text-secondary">
+            <div class="col-md-3">
+                <strong class="text-light d-block mb-1"><i class="fa-brands fa-python text-warning me-1"></i> Backend</strong>
+                Python 3.14, Flask 3.1, Werkzeug Security
+            </div>
+            <div class="col-md-3">
+                <strong class="text-light d-block mb-1"><i class="fa-solid fa-brain text-cyan me-1"></i> Machine Learning</strong>
+                Scikit-learn, Pandas, NumPy, Joblib
+            </div>
+            <div class="col-md-3">
+                <strong class="text-light d-block mb-1"><i class="fa-solid fa-database text-info me-1"></i> Database</strong>
+                SQLite, SQLAlchemy 2.0 ORM
+            </div>
+            <div class="col-md-3">
+                <strong class="text-light d-block mb-1"><i class="fa-brands fa-js text-warning me-1"></i> Frontend & 3D</strong>
+                Three.js (r128), HTML5, CSS3, Bootstrap 5
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+

@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}Explore Movies - Film Discovery - CineMatch AI{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5 py-4">
+
+    <!-- Top Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 pb-3 border-bottom-subtle">
+        <div>
+            <h1 class="font-outfit fw-bold text-white mb-1 d-flex align-items-center gap-2">
+                <i class="fa-solid fa-compass text-cyan"></i>
+                <span>Explore & Discover Movies</span>
+            </h1>
+            <p class="text-secondary fs-xs mb-0">
+                Filter global cinema across languages, industries, genres, and release eras via real-time TMDB data
+            </p>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 mt-3 mt-md-0">
+            <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" id="clearAllFiltersBtn">
+                <i class="fa-solid fa-rotate-left me-1"></i> Clear Filters
+            </button>
+            <span class="badge bg-cyan-subtle text-cyan fs-xs px-3 py-2 rounded-pill" id="resultsCountBadge">
+                Showing <span id="currentResultsCount">{{ total_results }}</span> Titles
+            </span>
+        </div>
+    </div>
+
+    <!-- Filter Control Bar -->
+    <div class="explore-filters-panel p-4 rounded-4 mb-4 shadow-lg border-subtle bg-card-dark">
+        <form id="filterForm" class="row g-3">
+            
+            <!-- 1. Language Filter -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <label for="filterLanguage" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary fw-semibold">
+                    <i class="fa-solid fa-language text-cyan me-1"></i> Language
+                </label>
+                <select class="form-select glass-select" id="filterLanguage" name="language">
+                    <option value="">All Languages (Global)</option>
+                    {% for code, name in languages.items() %}
+                        <option value="{{ code }}" {% if selected_language == code %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- 2. Film Industry Filter -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <label for="filterIndustry" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary fw-semibold">
+                    <i class="fa-solid fa-clapperboard text-cyan me-1"></i> Industry / Category
+                </label>
+                <select class="form-select glass-select" id="filterIndustry" name="industry">
+                    <option value="">All Film Industries</option>
+                    <optgroup label="Indian Cinema">
+                        <option value="tollywood" {% if selected_industry == 'tollywood' %}selected{% endif %}>Tollywood (Telugu)</option>
+                        <option value="bollywood" {% if selected_industry == 'bollywood' %}selected{% endif %}>Bollywood (Hindi)</option>
+                        <option value="kollywood" {% if selected_industry == 'kollywood' %}selected{% endif %}>Kollywood (Tamil)</option>
+                        <option value="mollywood" {% if selected_industry == 'mollywood' %}selected{% endif %}>Mollywood (Malayalam)</option>
+                        <option value="sandalwood" {% if selected_industry == 'sandalwood' %}selected{% endif %}>Sandalwood (Kannada)</option>
+                        <option value="bengali" {% if selected_industry == 'bengali' %}selected{% endif %}>Bengali Cinema</option>
+                        <option value="marathi" {% if selected_industry == 'marathi' %}selected{% endif %}>Marathi Cinema</option>
+                        <option value="punjabi" {% if selected_industry == 'punjabi' %}selected{% endif %}>Punjabi Cinema</option>
+                    </optgroup>
+                    <optgroup label="International Cinema">
+                        <option value="hollywood" {% if selected_industry == 'hollywood' %}selected{% endif %}>Hollywood (USA)</option>
+                        <option value="korean" {% if selected_industry == 'korean' %}selected{% endif %}>Korean Cinema</option>
+                        <option value="japanese" {% if selected_industry == 'japanese' %}selected{% endif %}>Japanese Cinema</option>
+                        <option value="chinese" {% if selected_industry == 'chinese' %}selected{% endif %}>Chinese Cinema</option>
+                        <option value="french" {% if selected_industry == 'french' %}selected{% endif %}>French Cinema</option>
+                        <option value="spanish" {% if selected_industry == 'spanish' %}selected{% endif %}>Spanish Cinema</option>
+                    </optgroup>
+                    <optgroup label="Animation & Anime">
+                        <option value="anime" {% if selected_industry == 'anime' %}selected{% endif %}>Anime</option>
+                        <option value="animation" {% if selected_industry == 'animation' %}selected{% endif %}>Animated Movies</option>
+                        <option value="family_animation" {% if selected_industry == 'family_animation' %}selected{% endif %}>Family Animation</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- 3. Release Period Filter -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <label for="filterPeriod" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary fw-semibold">
+                    <i class="fa-solid fa-clock-rotate-left text-cyan me-1"></i> Release Era
+                </label>
+                <select class="form-select glass-select" id="filterPeriod" name="period">
+                    <option value="">All Release Years</option>
+                    <option value="latest" {% if selected_period == 'latest' %}selected{% endif %}>Latest Movies (2025 onwards)</option>
+                    <option value="2016-2024" {% if selected_period == '2016-2024' %}selected{% endif %}>2016 &ndash; 2024</option>
+                    <option value="2000-2015" {% if selected_period == '2000-2015' %}selected{% endif %}>2000 &ndash; 2015</option>
+                    <option value="classic" {% if selected_period == 'classic' %}selected{% endif %}>Classic Masterpieces (Pre-2000)</option>
+                </select>
+            </div>
+
+            <!-- 4. Sort Order -->
+            <div class="col-12 col-md-6 col-lg-3">
+                <label for="filterSort" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary fw-semibold">
+                    <i class="fa-solid fa-arrow-down-wide-short text-cyan me-1"></i> Sort By
+                </label>
+                <select class="form-select glass-select" id="filterSort" name="sort_by">
+                    <option value="popularity.desc" {% if selected_sort == 'popularity.desc' %}selected{% endif %}>Most Popular</option>
+                    <option value="rating" {% if selected_sort == 'rating' %}selected{% endif %}>Highest Rated</option>
+                    <option value="latest" {% if selected_sort == 'latest' %}selected{% endif %}>Latest Release Date</option>
+                </select>
+            </div>
+
+            <!-- 5. Multi-Genre Checkbox / Chips Bar -->
+            <div class="col-12 mt-3 pt-3 border-top-subtle">
+                <label class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary fw-semibold mb-2 d-flex justify-content-between align-items-center">
+                    <span><i class="fa-solid fa-tags text-cyan me-1"></i> Genres (Multi-Select)</span>
+                    <button type="button" class="btn btn-link btn-sm text-cyan text-decoration-none p-0 fs-2xs" id="clearGenresBtn">Deselect All</button>
+                </label>
+                <div class="genre-chips-container d-flex flex-wrap gap-2">
+                    {% for gid, gname in genres.items() %}
+                    <label class="genre-chip-label">
+                        <input type="checkbox" name="genre_ids" value="{{ gid }}" class="genre-checkbox d-none" {% if selected_genre == (gid|string) %}checked{% endif %}>
+                        <span class="genre-chip-badge">{{ gname }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Active Filters Summary Banner -->
+    <div id="activeFiltersSummary" class="d-flex flex-wrap align-items-center gap-2 mb-4 d-none">
+        <span class="text-secondary fs-xs">Active filters:</span>
+        <div id="filterPillsContainer" class="d-flex flex-wrap gap-1"></div>
+    </div>
+
+    <!-- Loading State Spinner -->
+    <div id="exploreLoading" class="text-center py-5 d-none">
+        <div class="spinner-border text-cyan mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+        <p class="text-secondary fs-sm font-outfit">Loading movies from TMDB API...</p>
+    </div>
+
+    <!-- Movie Results Grid -->
+    <div class="movie-grid-explore" id="exploreMovieGrid">
+        {% for movie in movies %}
+        <div class="movie-poster-card" data-movie-id="{{ movie.id }}">
+            <div class="poster-media position-relative">
+                
+                <!-- Rating Badge -->
+                <div class="card-rating-badge">
+                    <i class="fa-solid fa-star text-warning me-1"></i>
+                    <span>{{ movie.vote_average }}</span>
+                </div>
+
+                <!-- Poster -->
+                {% if movie.poster_url %}
+                <img src="{{ movie.poster_url }}" alt="{{ movie.title }}" class="poster-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">
+                {% endif %}
+                <div class="poster-svg-fallback {% if movie.poster_url %}d-none{% endif %}">
+                    <i class="fa-solid fa-film text-cyan fs-1 mb-2 opacity-50"></i>
+                    <span class="fs-xs fw-bold text-white text-center px-2">{{ movie.title }}</span>
+                </div>
+
+                <!-- Hover Overlay -->
+                <div class="poster-hover-overlay">
+                    <div class="overlay-actions d-flex flex-column gap-2 p-3 w-100">
+                        <button type="button" class="btn btn-cyan btn-sm rounded-pill w-100 btn-movie-details" data-movie-id="{{ movie.id }}">
+                            <i class="fa-solid fa-circle-info me-1"></i> Details
+                        </button>
+                        
+                        {% set is_in_watchlist = (movie.id in watchlist_ids) %}
+                        <button type="button" class="btn {% if is_in_watchlist %}btn-success{% else %}btn-outline-light{% endif %} btn-sm rounded-pill w-100 btn-watchlist-toggle" 
+                                data-movie-id="{{ movie.id }}" 
+                                data-is-added="{{ 'true' if is_in_watchlist else 'false' }}">
+                            <i class="{% if is_in_watchlist %}fa-solid{% else %}fa-regular{% endif %} fa-bookmark me-1"></i> 
+                            {{ 'Saved' if is_in_watchlist else 'Watchlist' }}
+                        </button>
+                        
+                        <button type="button" class="btn btn-outline-cyan btn-sm rounded-pill w-100 btn-movie-similar" 
+                                data-movie-id="{{ movie.id }}" 
+                                data-movie-title="{{ movie.title }}">
+                            <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Similar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metadata -->
+            <div class="poster-info pt-2 px-1">
+                <h6 class="poster-title font-outfit text-white text-truncate mb-1" title="{{ movie.title }}">{{ movie.title }}</h6>
+                <div class="d-flex align-items-center justify-content-between text-secondary fs-2xs mb-1">
+                    <span>{{ movie.release_year }}</span>
+                    <span class="badge bg-dark-subtle text-cyan fs-2xs">{{ movie.language_name or movie.language_code|upper }}</span>
+                </div>
+                <div class="text-secondary fs-2xs text-truncate">{{ movie.genres_str }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Empty State -->
+    <div id="exploreEmptyState" class="card bg-card-dark border-subtle rounded-4 text-center py-5 px-4 shadow-lg mx-auto {% if movies %}d-none{% endif %}" style="max-width: 620px;">
+        <i class="fa-solid fa-film-slash text-cyan fs-1 mb-3 opacity-60"></i>
+        <h4 class="font-outfit fw-bold text-white mb-2">No Matching Movies Found</h4>
+        <p class="text-secondary fs-sm mb-4">
+            Try adjusting your filter combinations (e.g. relaxing genres or choosing a broader release period).
+        </p>
+        <div>
+            <button type="button" class="btn btn-cyan rounded-pill px-4" id="resetEmptyBtn">Reset Filters</button>
+        </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-center align-items-center gap-3 mt-5" id="paginationControls">
+        <button class="btn btn-outline-cyan-subtle rounded-pill px-4" id="prevPageBtn" {% if page <= 1 %}disabled{% endif %}>
+            <i class="fa-solid fa-arrow-left me-2"></i> Previous
+        </button>
+        <span class="text-secondary fs-xs">Page <strong class="text-white" id="currentPageNum">{{ page }}</strong> of <span id="totalPagesNum">{{ total_pages }}</span></span>
+        <button class="btn btn-outline-cyan-subtle rounded-pill px-4" id="nextPageBtn" {% if page >= total_pages %}disabled{% endif %}>
+            Next <i class="fa-solid fa-arrow-right ms-2"></i>
+        </button>
+    </div>
+
+</div>
+{% endblock %}
+

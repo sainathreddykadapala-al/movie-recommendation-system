@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}My Watchlist - CineMatch AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Watchlist Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 pb-2 border-bottom-subtle">
+        <div>
+            <h2 class="font-outfit fw-bold text-white mb-1 d-flex align-items-center gap-2">
+                <i class="fa-solid fa-bookmark text-cyan"></i>
+                <span>My Movie Watchlist</span>
+            </h2>
+            <p class="text-secondary fs-xs mb-0">Your saved personal films, stored securely in SQLite with high-resolution poster art</p>
+        </div>
+        <div class="mt-2 mt-md-0">
+            <span class="badge bg-cyan-subtle text-cyan fs-sm px-3 py-2 rounded-pill">
+                {{ watchlist_items|length }} {{ 'Movie' if watchlist_items|length == 1 else 'Movies' }} Saved
+            </span>
+        </div>
+    </div>
+
+    {% if watchlist_items %}
+    <div class="movie-grid-explore mb-5">
+        {% for item in watchlist_items %}
+        <div class="movie-poster-card" id="watchlist-card-{{ item.movie_id }}" data-movie-id="{{ item.movie_id }}">
+            <div class="poster-media position-relative">
+                
+                <!-- Rating Badge -->
+                <div class="card-rating-badge">
+                    <i class="fa-solid fa-star text-warning me-1"></i>
+                    <span>{{ item.vote_average or 'N/A' }}</span>
+                </div>
+
+                <!-- Poster Image -->
+                {% if item.poster_path %}
+                <img src="https://image.tmdb.org/t/p/w500{{ item.poster_path }}" alt="{{ item.movie_title }}" class="poster-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">
+                {% endif %}
+                <div class="poster-svg-fallback {% if item.poster_path %}d-none{% endif %}">
+                    <i class="fa-solid fa-bookmark text-cyan fs-1 mb-2 opacity-50"></i>
+                    <span class="fs-xs fw-bold text-white text-center px-2">{{ item.movie_title }}</span>
+                </div>
+
+                <!-- Hover Overlay -->
+                <div class="poster-hover-overlay">
+                    <div class="overlay-actions d-flex flex-column gap-2 p-3 w-100">
+                        <button type="button" class="btn btn-cyan btn-sm rounded-pill w-100 btn-movie-details" data-movie-id="{{ item.movie_id }}">
+                            <i class="fa-solid fa-circle-info me-1"></i> Details
+                        </button>
+                        
+                        <button type="button" class="btn btn-outline-cyan btn-sm rounded-pill w-100 btn-movie-similar" 
+                                data-movie-id="{{ item.movie_id }}" 
+                                data-movie-title="{{ item.movie_title }}">
+                            <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Similar
+                        </button>
+                        
+                        <form action="{{ url_for('watchlist.remove', movie_id=item.movie_id) }}" method="POST" class="w-100">
+                            <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill w-100 hover-danger" onclick="return confirm('Remove this film from your watchlist?');">
+                                <i class="fa-solid fa-trash-can me-1"></i> Remove
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metadata -->
+            <div class="poster-info pt-2 px-1">
+                <h6 class="poster-title font-outfit text-white text-truncate mb-1" title="{{ item.movie_title }}">{{ item.movie_title }}</h6>
+                <div class="d-flex align-items-center justify-content-between text-secondary fs-2xs mb-1">
+                    <span>{{ item.release_year or '2024' }}</span>
+                    <span class="badge bg-dark-subtle text-cyan fs-2xs">{{ item.genres or 'General' }}</span>
+                </div>
+                <div class="text-secondary fs-2xs">
+                    <i class="fa-regular fa-calendar-check me-1"></i> Added {{ item.added_at.strftime('%b %d, %Y') if item.added_at else 'Recently' }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card bg-card-dark border-subtle rounded-4 text-center py-5 px-4 shadow-lg mx-auto" style="max-width: 620px;">
+        <div class="mb-3">
+            <span class="section-icon-badge mx-auto" style="width: 70px; height: 70px; font-size: 2rem;">
+                <i class="fa-regular fa-bookmark"></i>
+            </span>
+        </div>
+        <h4 class="font-outfit fw-bold text-white mb-2">Your Watchlist is Empty</h4>
+        <p class="text-secondary fs-sm mb-4">
+            Browse through trending films, regional cinema, or AI recommendations and click the bookmark icon to save titles here.
+        </p>
+        <div>
+            <a href="{{ url_for('main.explore') }}" class="btn btn-cyan rounded-pill px-4 py-2 font-outfit fw-semibold">
+                <i class="fa-solid fa-compass me-2"></i> Explore Films Now
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

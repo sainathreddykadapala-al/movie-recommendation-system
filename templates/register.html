@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - CineMatch AI</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body class="login-body">
+
+    <!-- Three.js Ambient Canvas -->
+    <canvas id="threeCanvas" class="three-canvas"></canvas>
+
+    <div class="ambient-glow cyan-glow"></div>
+    <div class="ambient-glow purple-glow"></div>
+
+    <div class="login-page-wrapper">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center justify-content-center">
+                
+                <div class="col-12 col-md-9 col-lg-6 col-xl-5">
+                    <div class="glass-login-card shadow-cyan-xl animate-card-entrance">
+                        
+                        <div class="text-center mb-4">
+                            <!-- Animated Movie-Themed Icon (Clapperboard & Spinning Reel) -->
+                            <div class="movie-icon-badge-wrapper" title="CineMatch AI Cinema Engine">
+                                <div class="movie-animated-emblem">
+                                    <i class="fa-solid fa-clapperboard movie-core-icon"></i>
+                                    <i class="fa-solid fa-sparkles movie-sparkle"></i>
+                                </div>
+                            </div>
+
+                            <div class="brand-badge mb-3">
+                                <i class="fa-solid fa-film text-cyan"></i>
+                                <span class="brand-text">Cine<span class="text-cyan">Match</span> AI</span>
+                            </div>
+                            <h2 class="font-outfit fw-bold text-white mb-1">Create Account</h2>
+                            <p class="text-secondary fs-sm">Join our AI-powered movie recommendation platform</p>
+                        </div>
+
+                        <!-- Flash Messages -->
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show border-0 glass-alert-card py-2 px-3 mb-3 fs-xs" role="alert">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fa-solid fa-circle-exclamation"></i>
+                                            <div>{{ message }}</div>
+                                        </div>
+                                        <button type="button" class="btn-close btn-close-white fs-2xs" data-bs-dismiss="alert"></button>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+
+                        <!-- Register Form -->
+                        <form action="{{ url_for('auth.register') }}" method="POST" id="registerForm" novalidate>
+                            
+                            <!-- Full Name -->
+                            <div class="form-group mb-3">
+                                <label for="full_name" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary-emphasis">Full Name</label>
+                                <div class="input-glow-wrapper">
+                                    <i class="fa-regular fa-user input-icon"></i>
+                                    <input type="text" class="form-control glass-input" id="full_name" name="full_name" value="{{ full_name or '' }}" placeholder="Alex Morgan" required>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="form-group mb-3">
+                                <label for="email" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary-emphasis">Email Address</label>
+                                <div class="input-glow-wrapper">
+                                    <i class="fa-regular fa-envelope input-icon"></i>
+                                    <input type="email" class="form-control glass-input" id="email" name="email" value="{{ email or '' }}" placeholder="alex@university.edu" required autocomplete="email">
+                                </div>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <!-- Password -->
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary-emphasis">Password</label>
+                                    <div class="input-glow-wrapper">
+                                        <i class="fa-solid fa-lock input-icon"></i>
+                                        <input type="password" class="form-control glass-input" id="password" name="password" placeholder="Min 6 chars" required autocomplete="new-password">
+                                    </div>
+                                </div>
+
+                                <!-- Confirm Password -->
+                                <div class="col-md-6">
+                                    <label for="confirm_password" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary-emphasis">Confirm Password</label>
+                                    <div class="input-glow-wrapper">
+                                        <i class="fa-solid fa-shield-halved input-icon"></i>
+                                        <input type="password" class="form-control glass-input" id="confirm_password" name="confirm_password" placeholder="Re-enter password" required autocomplete="new-password">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="password-match-indicator mb-3 fs-2xs text-secondary" id="passwordMatchMsg"></div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-cyan-glow w-100 py-3 rounded-pill fw-semibold text-uppercase letter-spacing-1 font-outfit" id="submitBtn">
+                                <span>Create My Account</span>
+                                <i class="fa-solid fa-user-plus ms-2"></i>
+                            </button>
+
+                        </form>
+
+                        <!-- Card Footer -->
+                        <div class="text-center mt-4 pt-3 border-top-subtle">
+                            <p class="fs-xs text-secondary mb-0">
+                                Already have an account? 
+                                <a href="{{ url_for('auth.login') }}" class="text-cyan fw-semibold hover-underline ms-1">Sign In</a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <script>
+        // Real-time password confirmation match check
+        const pwd = document.getElementById('password');
+        const cpwd = document.getElementById('confirm_password');
+        const matchMsg = document.getElementById('passwordMatchMsg');
+
+        function checkMatch() {
+            if (!pwd.value || !cpwd.value) {
+                matchMsg.textContent = '';
+                return;
+            }
+            if (pwd.value === cpwd.value) {
+                matchMsg.innerHTML = '<span class="text-success"><i class="fa-solid fa-circle-check me-1"></i> Passwords match!</span>';
+            } else {
+                matchMsg.innerHTML = '<span class="text-danger"><i class="fa-solid fa-circle-xmark me-1"></i> Passwords do not match.</span>';
+            }
+        }
+        if (pwd && cpwd) {
+            pwd.addEventListener('input', checkMatch);
+            cpwd.addEventListener('input', checkMatch);
+        }
+    </script>
+</body>
+</html>
+
