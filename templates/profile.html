@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}User Profile - CineMatch AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="d-flex align-items-center justify-content-between mb-4 pb-2 border-bottom-subtle">
+        <div>
+            <h2 class="font-outfit fw-bold text-white mb-1 d-flex align-items-center gap-2">
+                <i class="fa-solid fa-id-card text-cyan"></i>
+                <span>Account Profile</span>
+            </h2>
+            <p class="text-secondary fs-xs mb-0">Manage your profile credentials and view your system statistics</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        
+        <!-- Left Column: User Summary Card -->
+        <div class="col-lg-4">
+            <div class="card bg-card-dark border-subtle rounded-4 p-4 text-center shadow-lg mb-4">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-cyan-subtle border-cyan-subtle d-inline-flex align-items-center justify-content-center text-cyan fs-1" style="width: 90px; height: 90px;">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                    </div>
+                </div>
+                <h4 class="font-outfit fw-bold text-white mb-1">{{ user.full_name }}</h4>
+                <p class="text-secondary fs-sm mb-3">{{ user.email }}</p>
+                <div class="badge bg-secondary-subtle text-light fs-xs px-3 py-2 rounded-pill mb-4">
+                    <i class="fa-regular fa-calendar-check me-1 text-cyan"></i> Member since {{ user.created_at.strftime('%B %Y') if user.created_at else '2026' }}
+                </div>
+
+                <div class="border-top-subtle pt-3 text-start">
+                    <div class="d-flex justify-content-between align-items-center mb-2 fs-xs">
+                        <span class="text-secondary"><i class="fa-solid fa-wand-magic-sparkles me-1 text-cyan"></i> Recommendation Queries:</span>
+                        <span class="fw-bold text-white">{{ rec_count }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center fs-xs">
+                        <span class="text-secondary"><i class="fa-solid fa-bookmark me-1 text-cyan"></i> Watchlist Items:</span>
+                        <span class="fw-bold text-white">{{ watchlist_count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Settings & Password Change -->
+        <div class="col-lg-8">
+            
+            <!-- Update Full Name Form -->
+            <div class="card bg-card-dark border-subtle rounded-4 p-4 shadow-lg mb-4">
+                <h5 class="font-outfit fw-bold text-white mb-3 d-flex align-items-center gap-2">
+                    <i class="fa-regular fa-user-pen text-cyan"></i>
+                    <span>Personal Details</span>
+                </h5>
+                <form action="{{ url_for('main.profile') }}" method="POST">
+                    <input type="hidden" name="action" value="update_profile">
+                    
+                    <div class="mb-3">
+                        <label for="full_name" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary">Full Name</label>
+                        <input type="text" class="form-control glass-input" id="full_name" name="full_name" value="{{ user.full_name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary">Email Address (Read-only)</label>
+                        <input type="email" class="form-control glass-input text-secondary" value="{{ user.email }}" disabled>
+                    </div>
+
+                    <button type="submit" class="btn btn-cyan rounded-pill px-4 py-2 font-outfit fw-semibold fs-sm">
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Save Name Changes
+                    </button>
+                </form>
+            </div>
+
+            <!-- Change Password Form -->
+            <div class="card bg-card-dark border-subtle rounded-4 p-4 shadow-lg">
+                <h5 class="font-outfit fw-bold text-white mb-3 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-key text-cyan"></i>
+                    <span>Change Password</span>
+                </h5>
+                <form action="{{ url_for('main.profile') }}" method="POST">
+                    <input type="hidden" name="action" value="change_password">
+
+                    <div class="mb-3">
+                        <label for="current_password" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary">Current Password</label>
+                        <input type="password" class="form-control glass-input" id="current_password" name="current_password" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label for="new_password" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary">New Password</label>
+                            <input type="password" class="form-control glass-input" id="new_password" name="new_password" placeholder="At least 6 characters" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="confirm_new_password" class="form-label fs-xs text-uppercase letter-spacing-1 text-secondary">Confirm New Password</label>
+                            <input type="password" class="form-control glass-input" id="confirm_new_password" name="confirm_new_password" placeholder="Re-enter new password" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-outline-cyan rounded-pill px-4 py-2 font-outfit fw-semibold fs-sm">
+                        <i class="fa-solid fa-shield-check me-1"></i> Update Password
+                    </button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}
+

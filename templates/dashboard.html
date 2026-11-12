@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Discover Movies - CineMatch AI{% endblock %}
+
+{% block content %}
+<div class="cinematic-home">
+
+    <!-- Hero Section -->
+    <section class="hero-cinematic text-center position-relative">
+        <div class="container py-5">
+            
+            <div class="hero-badge-pill mb-3 d-inline-flex align-items-center gap-2">
+                <i class="fa-solid fa-sparkles text-cyan"></i>
+                <span>Next-Gen Cinema Discovery & AI Recommendations</span>
+            </div>
+
+            <h1 class="hero-main-title font-outfit fw-bold text-white mb-2">
+                Discover Your Next <span class="text-gradient-cyan">Favourite Movie</span>
+            </h1>
+            <p class="hero-sub-title text-secondary fs-6 mb-4 mx-auto">
+                Explore cinema from around the world, across languages, industries and generations.
+            </p>
+
+            <!-- Search Bar with Live Poster Typeahead -->
+            <div class="search-hero-wrapper position-relative mx-auto mb-4">
+                <form action="{{ url_for('recommendations.recommend') }}" method="GET" id="heroSearchForm">
+                    <div class="search-bar-glass d-flex align-items-center">
+                        <i class="fa-solid fa-magnifying-glass search-bar-icon text-cyan"></i>
+                        <input type="text" class="search-bar-input" id="globalMovieSearch" name="movie" placeholder="Search by movie title (e.g. Interstellar, RRR, Inception, Avatar, Vikram)..." autocomplete="off" required>
+                        <button type="submit" class="btn btn-cyan rounded-pill px-4 py-2 font-outfit fw-semibold search-bar-btn">
+                            <span>Explore</span>
+                            <i class="fa-solid fa-arrow-right ms-1"></i>
+                        </button>
+                    </div>
+                    <!-- Live Autocomplete Dropdown with Real Poster Thumbnails -->
+                    <div id="heroSearchDropdown" class="search-autocomplete-dropdown text-start shadow-cyan-lg"></div>
+                </form>
+            </div>
+
+            <!-- Quick Filter Shortcuts -->
+            <div class="quick-filter-pills d-flex flex-wrap justify-content-center align-items-center gap-2">
+                <span class="text-secondary fs-xs text-uppercase letter-spacing-1 me-1">Popular Filters:</span>
+                <a href="{{ url_for('main.explore', industry='tollywood') }}" class="btn-filter-pill">
+                    <i class="fa-solid fa-film text-cyan me-1"></i> Tollywood (Telugu)
+                </a>
+                <a href="{{ url_for('main.explore', industry='bollywood') }}" class="btn-filter-pill">
+                    <i class="fa-solid fa-masks-theater text-cyan me-1"></i> Bollywood (Hindi)
+                </a>
+                <a href="{{ url_for('main.explore', industry='kollywood') }}" class="btn-filter-pill">
+                    <i class="fa-solid fa-clapperboard text-cyan me-1"></i> Kollywood (Tamil)
+                </a>
+                <a href="{{ url_for('main.explore', industry='hollywood') }}" class="btn-filter-pill">
+                    <i class="fa-solid fa-globe text-cyan me-1"></i> Hollywood
+                </a>
+                <a href="{{ url_for('main.explore', genre='878') }}" class="btn-filter-pill">
+                    <i class="fa-solid fa-rocket text-cyan me-1"></i> Sci-Fi
+                </a>
+                <a href="{{ url_for('main.explore', genre='28') }}" class="btn-filter-pill">
+                    <i class="fa-solid fa-fire text-cyan me-1"></i> Action
+                </a>
+                <a href="{{ url_for('main.explore', period='latest') }}" class="btn-filter-pill">
+                    <i class="fa-solid fa-calendar-star text-cyan me-1"></i> Latest (2025+)
+                </a>
+                <a href="{{ url_for('main.explore') }}" class="btn btn-outline-cyan-subtle btn-sm rounded-pill px-3 fs-xs">
+                    <i class="fa-solid fa-sliders me-1"></i> All Filters
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Horizontal Carousel Featured Sections -->
+    <div class="container-fluid px-lg-5 pb-5">
+        {% for section in sections %}
+        {% if section.movies %}
+        <section class="cinematic-section mb-5" id="section-{{ section.id }}">
+            
+            <!-- Section Header -->
+            <div class="d-flex align-items-center justify-content-between mb-3 px-2">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="section-icon-badge"><i class="{{ section.icon }} text-cyan"></i></span>
+                    <h3 class="section-heading font-outfit text-white fw-bold mb-0">{{ section.title|safe }}</h3>
+                </div>
+                
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Carousel Left/Right Scroll Controls -->
+                    <button class="btn-carousel-nav btn-prev" data-target="carousel-{{ section.id }}" aria-label="Scroll Left">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button class="btn-carousel-nav btn-next" data-target="carousel-{{ section.id }}" aria-label="Scroll Right">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Horizontal Scrollable Row -->
+            <div class="carousel-horizontal-track" id="carousel-{{ section.id }}">
+                {% for movie in section.movies %}
+                <div class="movie-poster-card" data-movie-id="{{ movie.id }}">
+                    
+                    <div class="poster-media position-relative">
+                        <!-- Rating Badge -->
+                        <div class="card-rating-badge">
+                            <i class="fa-solid fa-star text-warning me-1"></i>
+                            <span>{{ movie.vote_average }}</span>
+                        </div>
+
+                        <!-- Real TMDB Poster Image -->
+                        {% if movie.poster_url %}
+                        <img src="{{ movie.poster_url }}" alt="{{ movie.title }}" class="poster-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">
+                        {% endif %}
+                        <div class="poster-svg-fallback {% if movie.poster_url %}d-none{% endif %}">
+                            <i class="fa-solid fa-film text-cyan fs-1 mb-2 opacity-50"></i>
+                            <span class="fs-xs fw-bold text-white text-center px-2">{{ movie.title }}</span>
+                        </div>
+
+                        <!-- Quick Hover Overlay -->
+                        <div class="poster-hover-overlay">
+                            <div class="overlay-actions d-flex flex-column gap-2 p-3 w-100">
+                                <button type="button" class="btn btn-cyan btn-sm rounded-pill w-100 btn-movie-details" data-movie-id="{{ movie.id }}">
+                                    <i class="fa-solid fa-circle-info me-1"></i> Details
+                                </button>
+                                
+                                {% set is_in_watchlist = (movie.id in watchlist_ids) %}
+                                <button type="button" class="btn {% if is_in_watchlist %}btn-success{% else %}btn-outline-light{% endif %} btn-sm rounded-pill w-100 btn-watchlist-toggle" 
+                                        data-movie-id="{{ movie.id }}" 
+                                        data-is-added="{{ 'true' if is_in_watchlist else 'false' }}">
+                                    <i class="{% if is_in_watchlist %}fa-solid{% else %}fa-regular{% endif %} fa-bookmark me-1"></i> 
+                                    {{ 'Saved' if is_in_watchlist else 'Watchlist' }}
+                                </button>
+                                
+                                <button type="button" class="btn btn-outline-cyan btn-sm rounded-pill w-100 btn-movie-similar" 
+                                        data-movie-id="{{ movie.id }}" 
+                                        data-movie-title="{{ movie.title }}">
+                                    <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Similar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metadata -->
+                    <div class="poster-info pt-2 px-1">
+                        <h6 class="poster-title font-outfit text-white text-truncate mb-1" title="{{ movie.title }}">{{ movie.title }}</h6>
+                        <div class="d-flex align-items-center justify-content-between text-secondary fs-2xs">
+                            <span>{{ movie.release_year }}</span>
+                            <span class="badge bg-dark-subtle text-cyan fs-2xs">{{ movie.language_name or movie.language_code|upper }}</span>
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
+
+        </section>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

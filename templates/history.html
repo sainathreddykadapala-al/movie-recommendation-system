@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Recommendation History - CineMatch AI{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-4 pb-2 border-bottom-subtle">
+        <div>
+            <h2 class="font-outfit fw-bold text-white mb-1 d-flex align-items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-cyan"></i>
+                <span>Recommendation History</span>
+            </h2>
+            <p class="text-secondary fs-xs mb-0">Record of your past machine learning recommendation queries and suggested titles</p>
+        </div>
+        <div class="mt-2 mt-md-0">
+            <span class="badge bg-cyan-subtle text-cyan fs-sm px-3 py-2 rounded-pill">
+                {{ history_records|length }} {{ 'Search' if history_records|length == 1 else 'Searches' }} Recorded
+            </span>
+        </div>
+    </div>
+
+    {% if history_records %}
+    <div class="d-flex flex-column gap-4">
+        {% for record in history_records %}
+        {% set rec_list = record.get_recommendations() %}
+        <div class="card bg-card-dark border-subtle rounded-4 p-4 shadow-lg">
+            <div class="d-flex flex-wrap align-items-center justify-content-between mb-3 border-bottom-subtle pb-3">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="stat-icon-wrapper stat-cyan" style="width: 44px; height: 44px; font-size: 1.1rem;">
+                        <i class="fa-solid fa-film"></i>
+                    </span>
+                    <div>
+                        <h5 class="font-outfit fw-bold text-white mb-0">{{ record.selected_movie_title }}</h5>
+                        <span class="text-secondary fs-2xs">
+                            Thematic Cluster #{{ record.cluster_id if record.cluster_id is not none else '-' }} &bull; Queried on {{ record.created_at.strftime('%b %d, %Y at %I:%M %p') }}
+                        </span>
+                    </div>
+                </div>
+                <div class="mt-2 mt-md-0">
+                    <a href="{{ url_for('recommendations.recommend', movie=record.selected_movie_title) }}" class="btn btn-outline-cyan-subtle btn-sm rounded-pill px-3">
+                        <i class="fa-solid fa-arrow-rotate-right me-1"></i> Re-run Search
+                    </a>
+                </div>
+            </div>
+
+            <!-- Recommended Movies from this historical session -->
+            <div class="row g-2">
+                {% for rec in rec_list %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="p-2 rounded-3 bg-dark-subtle border-subtle d-flex align-items-center justify-content-between">
+                        <div class="text-truncate me-2">
+                            <span class="text-light fw-medium fs-xs d-block text-truncate" title="{{ rec.title }}">{{ rec.title }}</span>
+                            <span class="text-secondary fs-2xs">{{ rec.release_year }} &bull; {{ rec.genres }}</span>
+                        </div>
+                        <div class="text-end text-nowrap">
+                            <span class="badge bg-cyan-subtle text-cyan fs-2xs px-2 py-1 rounded-pill">{{ rec.similarity_label }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card bg-card-dark border-subtle rounded-4 text-center py-5 px-4 shadow-lg mx-auto" style="max-width: 620px;">
+        <div class="mb-3">
+            <span class="stat-icon-wrapper stat-cyan mx-auto" style="width: 70px; height: 70px; font-size: 2rem;">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+            </span>
+        </div>
+        <h4 class="font-outfit fw-bold text-white mb-2">No Recommendation History Yet</h4>
+        <p class="text-secondary fs-sm mb-4">
+            When you search for movie recommendations, each session and its top candidates will be logged here for easy review.
+        </p>
+        <div>
+            <a href="{{ url_for('recommendations.recommend') }}" class="btn btn-cyan rounded-pill px-4 py-2 font-outfit fw-semibold">
+                <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Start First Recommendation
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}
+

@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+*.log
+
+# Environments
+venv/
+env/
+.venv/
+
+# Large raw datasets
+data/raw/tmdb_5000_credits.csv
+data/raw/tmdb_5000_movies.csv
+
+# Reference media
+static/reference/
+
+# Vercel & Testing
+.vercel/
+.git_tool/
+tests/

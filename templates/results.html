@@ -1,0 +1,493 @@
+{% extends "base.html" %}
+
+{% block title %}Recommendations for {{ query_movie.title }} - CineMatch AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- ================================================================= -->
+    <!-- 1. SELECTED MOVIE SPOTLIGHT (HERO CARD)                           -->
+    <!-- ================================================================= -->
+    <div class="query-spotlight-card mb-4 position-relative overflow-hidden rounded-4 p-4 border border-cyan-subtle shadow-cyan-lg">
+        
+        {% if query_movie.backdrop_url %}
+        <div class="spotlight-backdrop-bg" style="background-image: url('{{ query_movie.backdrop_url }}'); opacity: 0.18;"></div>
+        {% endif %}
+        
+        <div class="row align-items-center g-4 position-relative z-2">
+            
+            <!-- Large Movie Poster -->
+            <div class="col-md-3 text-center">
+                <div class="spotlight-poster-frame rounded-3 shadow-lg overflow-hidden mx-auto" style="max-width: 220px;">
+                    {% if query_movie.poster_url %}
+                    <img src="{{ query_movie.poster_url }}" alt="{{ query_movie.title }}" class="w-100 spotlight-poster-img" loading="eager" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">
+                    {% endif %}
+                    <div class="poster-svg-fallback {% if query_movie.poster_url %}d-none{% endif %} py-5">
+                        <i class="fa-solid fa-film text-cyan fs-1 mb-2"></i>
+                        <span class="fs-xs fw-bold text-white text-center px-2 d-block">{{ query_movie.title }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Movie Details & Narrative Metadata -->
+            <div class="col-md-9">
+                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                    <span class="badge bg-cyan-subtle text-cyan fs-xs px-3 py-2 rounded-pill fw-semibold">
+                        <i class="fa-solid fa-crosshairs me-1"></i> Selected Movie
+                    </span>
+                    
+                    <!-- Original Language Badge -->
+                    <span class="badge bg-primary-subtle text-cyan-glow border border-cyan-subtle fs-xs px-3 py-2 rounded-pill fw-semibold">
+                        <i class="fa-solid fa-language me-1"></i> {{ query_movie.original_language or query_movie.language_name or 'Global Cinema' }}
+                    </span>
+                    
+                    <span class="badge bg-secondary-subtle text-warning fs-xs px-3 py-2 rounded-pill fw-semibold">
+                        <i class="fa-solid fa-star me-1 text-warning"></i> {{ query_movie.vote_average }} / 10
+                    </span>
+
+                    <span class="badge bg-dark-subtle text-secondary fs-xs px-3 py-2 rounded-pill">
+                        <i class="fa-regular fa-calendar me-1"></i> {{ query_movie.release_year }}
+                    </span>
+                </div>
+
+                <h1 class="font-outfit fw-bold text-white display-6 mb-2">{{ query_movie.title }}</h1>
+
+                <div class="row g-2 mb-3 fs-sm text-secondary">
+                    <div class="col-sm-6">
+                        <span class="text-secondary-emphasis fw-semibold">Director:</span>
+                        <span class="text-cyan ms-1">{{ query_movie.director or 'Unknown' }}</span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span class="text-secondary-emphasis fw-semibold">Genres:</span>
+                        <span class="text-light ms-1">{{ query_movie.genres_str or query_movie.genres }}</span>
+                    </div>
+                    <div class="col-12">
+                        <span class="text-secondary-emphasis fw-semibold">Key Cast:</span>
+                        <span class="text-light ms-1">{{ query_movie.cast_str or query_movie.cast or 'Featured Cast' }}</span>
+                    </div>
+                </div>
+
+                <p class="text-secondary fs-sm mb-4 lh-base" style="max-width: 860px;">
+                    {{ query_movie.overview or 'No plot synopsis available.' }}
+                </p>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="{{ url_for('recommendations.recommend') }}" class="btn btn-outline-cyan-subtle btn-sm rounded-pill px-4">
+                        <i class="fa-solid fa-magnifying-glass me-1"></i> Search Another Movie
+                    </a>
+                    <a href="{{ url_for('main.explore') }}" class="btn btn-dark-subtle btn-sm rounded-pill px-4 text-light">
+                        <i class="fa-solid fa-compass me-1"></i> Browse Catalog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- 2. RECOMMENDATION CONTROL BAR (FILTERS & SORTING)                  -->
+    <!-- ================================================================= -->
+    <div class="rec-controls-card p-3 mb-4 rounded-4 bg-card-dark border border-subtle">
+        
+        <!-- Top Toolbar Header -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3 pb-2 border-bottom-subtle">
+            <div>
+                <h4 class="font-outfit fw-bold text-white mb-0 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-cyan"></i>
+                    <span>Similar Movies Across World Cinema</span>
+                </h4>
+                <p class="text-secondary fs-xs mb-0">
+                    Language-independent AI similarity ranking (Genre 30%, Storyline 30%, Keywords 20%, Cast 10%, Director 10%).
+                </p>
+            </div>
+            
+            <div class="d-flex align-items-center gap-2">
+                <span class="badge bg-dark-subtle text-cyan border border-cyan-subtle fs-xs px-3 py-2 rounded-pill" id="resultsCountBadge">
+                    {{ recommendations|length }} Movies
+                </span>
+                
+                <!-- Sort Dropdown -->
+                <div class="d-flex align-items-center gap-1">
+                    <label for="sortFilterSelect" class="text-secondary fs-xs fw-semibold mb-0 d-none d-sm-inline">Sort:</label>
+                    <select class="form-select form-select-sm bg-dark text-light border-subtle rounded-pill fs-xs px-3" id="sortFilterSelect" style="width: auto;">
+                        <option value="similarity" selected>Most Similar</option>
+                        <option value="highest_rated">Highest Rated</option>
+                        <option value="most_popular">Most Popular</option>
+                        <option value="latest">Latest Releases</option>
+                        <option value="oldest">Oldest Releases</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Controls: Language & Genre -->
+        <div class="d-flex flex-column gap-2">
+            
+            <!-- Language Filter Pills -->
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <span class="text-secondary fs-xs fw-semibold me-1"><i class="fa-solid fa-globe text-cyan me-1"></i>Language:</span>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs active" data-filter-type="language" data-filter-val="all">
+                    All Languages
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="language" data-filter-val="Telugu">
+                    Telugu
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="language" data-filter-val="Hindi">
+                    Hindi
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="language" data-filter-val="Tamil">
+                    Tamil
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="language" data-filter-val="Malayalam">
+                    Malayalam
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="language" data-filter-val="Kannada">
+                    Kannada
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="language" data-filter-val="English">
+                    English
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="language" data-filter-val="Korean">
+                    Korean
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="language" data-filter-val="Japanese">
+                    Japanese
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="language" data-filter-val="other">
+                    Other Languages
+                </button>
+            </div>
+
+            <!-- Genre Filter Pills -->
+            <div class="d-flex flex-wrap align-items-center gap-2 mt-1">
+                <span class="text-secondary fs-xs fw-semibold me-1"><i class="fa-solid fa-tags text-cyan me-1"></i>Genre:</span>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs active" data-filter-type="genre" data-filter-val="all">
+                    All Genres
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Action">
+                    Action
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Romance">
+                    Romance
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Thriller">
+                    Thriller
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Comedy">
+                    Comedy
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Crime">
+                    Crime
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Drama">
+                    Drama
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Horror">
+                    Horror
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Adventure">
+                    Adventure
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Sci-Fi">
+                    Sci-Fi
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Animation">
+                    Animation
+                </button>
+                <button type="button" class="btn btn-filter-pill btn-sm rounded-pill fs-2xs" data-filter-type="genre" data-filter-val="Family">
+                    Family
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================================================================= -->
+    <!-- 3. RECOMMENDED SIMILAR MOVIES GRID                                -->
+    <!-- ================================================================= -->
+    <div id="resultsGridContainer" class="movie-grid-explore mb-5">
+        {% for rec in recommendations %}
+        <div class="movie-poster-card" data-movie-id="{{ rec.id }}">
+            <div class="poster-media position-relative">
+                
+                <!-- Similarity Percentage Badge -->
+                <div class="similarity-badge" title="Multi-Feature AI Score">
+                    <i class="fa-solid fa-chart-line me-1"></i> {{ rec.similarity_percent }}%
+                </div>
+
+                <!-- Poster Image -->
+                {% if rec.poster_url %}
+                <img src="{{ rec.poster_url }}" alt="{{ rec.title }}" class="poster-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">
+                {% endif %}
+                <div class="poster-svg-fallback {% if rec.poster_url %}d-none{% endif %}">
+                    <i class="fa-solid fa-film text-cyan fs-1 mb-2 opacity-50"></i>
+                    <span class="fs-xs fw-bold text-white text-center px-2">{{ rec.title }}</span>
+                </div>
+
+                <!-- Hover Overlay with Details, Watchlist and Similar -->
+                <div class="poster-hover-overlay">
+                    <div class="overlay-actions d-flex flex-column gap-2 p-3 w-100">
+                        <button type="button" class="btn btn-cyan btn-sm rounded-pill w-100 btn-movie-details" data-movie-id="{{ rec.id }}">
+                            <i class="fa-solid fa-circle-info me-1"></i> View Details
+                        </button>
+                        
+                        {% set is_in_watchlist = (rec.id in watchlist_ids) %}
+                        <button type="button" class="btn {% if is_in_watchlist %}btn-success{% else %}btn-outline-light{% endif %} btn-sm rounded-pill w-100 btn-watchlist-toggle" 
+                                data-movie-id="{{ rec.id }}" 
+                                data-poster-path="{{ rec.poster_path or '' }}"
+                                data-is-added="{{ 'true' if is_in_watchlist else 'false' }}">
+                            <i class="{% if is_in_watchlist %}fa-solid{% else %}fa-regular{% endif %} fa-bookmark me-1"></i> 
+                            {{ 'Saved' if is_in_watchlist else 'Watchlist' }}
+                        </button>
+                        
+                        <button type="button" class="btn btn-outline-cyan btn-sm rounded-pill w-100 btn-movie-similar" 
+                                data-movie-id="{{ rec.id }}" 
+                                data-movie-title="{{ rec.title }}">
+                            <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Similar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Metadata -->
+            <div class="poster-info pt-2 px-1">
+                <h6 class="poster-title font-outfit text-white text-truncate mb-1" title="{{ rec.title }}">{{ rec.title }}</h6>
+                
+                <div class="d-flex align-items-center justify-content-between text-secondary fs-2xs mb-2">
+                    <span>
+                        <span class="badge bg-primary-subtle text-cyan border border-cyan-subtle fs-3xs me-1">{{ rec.language_name or 'Cinema' }}</span>
+                        {{ rec.release_year }}
+                    </span>
+                    <span class="text-warning fw-semibold">
+                        <i class="fa-solid fa-star text-warning"></i> {{ rec.vote_average }}
+                    </span>
+                </div>
+
+                <div class="text-secondary fs-3xs text-truncate mb-1">
+                    {{ rec.genres_str or rec.genres }}
+                </div>
+
+                {% if rec.explanation %}
+                <div class="movie-explanation-box fs-3xs">
+                    <i class="fa-solid fa-lightbulb text-cyan me-1"></i>
+                    <span>{{ rec.explanation }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Empty Filter Fallback -->
+    <div id="noFilteredResultsBox" class="text-center py-5 d-none">
+        <i class="fa-solid fa-film-slash text-secondary fs-1 mb-3"></i>
+        <h4 class="text-white font-outfit">No recommendations match the selected filters</h4>
+        <p class="text-secondary fs-sm mb-4">Try clicking "All Languages" or "All Genres" to restore complete recommendations.</p>
+        <button type="button" class="btn btn-cyan rounded-pill px-4" id="resetResultsFiltersBtn">
+            Reset All Filters
+        </button>
+    </div>
+
+</div>
+
+<!-- Full Scored Candidate Dataset for Instant Real-Time Client-Side Filtering -->
+<script id="allRecommendationsData" type="application/json">
+{{ all_recommendations | tojson | safe }}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let rawData = [];
+    try {
+        const jsonEl = document.getElementById('allRecommendationsData');
+        if (jsonEl) {
+            rawData = JSON.parse(jsonEl.textContent);
+        }
+    } catch (e) {
+        console.error('Failed to parse recommendations data:', e);
+    }
+
+    let activeLang = 'all';
+    let activeGenre = 'all';
+    let activeSort = 'similarity';
+
+    const container = document.getElementById('resultsGridContainer');
+    const emptyBox = document.getElementById('noFilteredResultsBox');
+    const countBadge = document.getElementById('resultsCountBadge');
+    const sortSelect = document.getElementById('sortFilterSelect');
+
+    function applyFiltersAndRender() {
+        if (!rawData || !rawData.length) return;
+
+        let filtered = rawData.slice();
+
+        // 1. Language Filter
+        if (activeLang !== 'all') {
+            if (activeLang === 'other') {
+                const standardLangs = ['telugu', 'hindi', 'tamil', 'malayalam', 'kannada', 'english', 'korean', 'japanese'];
+                filtered = filtered.filter(m => {
+                    const l = (m.language_name || '').toLowerCase();
+                    return !standardLangs.includes(l);
+                });
+            } else {
+                const targetL = activeLang.toLowerCase();
+                filtered = filtered.filter(m => (m.language_name || '').toLowerCase() === targetL);
+            }
+        }
+
+        // 2. Genre Filter
+        if (activeGenre !== 'all') {
+            const targetG = activeGenre.toLowerCase();
+            filtered = filtered.filter(m => {
+                const gList = m.genres || [];
+                if (Array.isArray(gList)) {
+                    return gList.some(g => String(g).toLowerCase().includes(targetG));
+                } else if (typeof gList === 'string') {
+                    return gList.toLowerCase().includes(targetG);
+                }
+                return false;
+            });
+        }
+
+        // 3. Sorting
+        if (activeSort === 'highest_rated') {
+            filtered.sort((a, b) => (Number(b.vote_average) || 0) - (Number(a.vote_average) || 0));
+        } else if (activeSort === 'most_popular') {
+            filtered.sort((a, b) => (Number(b.popularity) || 0) - (Number(a.popularity) || 0));
+        } else if (activeSort === 'latest') {
+            filtered.sort((a, b) => String(b.release_year || '0').localeCompare(String(a.release_year || '0')));
+        } else if (activeSort === 'oldest') {
+            filtered.sort((a, b) => String(a.release_year || '9999').localeCompare(String(b.release_year || '9999')));
+        } else {
+            // Most Similar default
+            filtered.sort((a, b) => (Number(b.similarity_score) || 0) - (Number(a.similarity_score) || 0));
+        }
+
+        // Update Count Badge
+        if (countBadge) countBadge.textContent = `${filtered.length} Movies`;
+
+        if (!filtered.length) {
+            container.classList.add('d-none');
+            emptyBox.classList.remove('d-none');
+            return;
+        }
+
+        container.classList.remove('d-none');
+        emptyBox.classList.add('d-none');
+        container.innerHTML = '';
+
+        filtered.forEach(rec => {
+            const card = document.createElement('div');
+            card.className = 'movie-poster-card';
+            card.setAttribute('data-movie-id', rec.id);
+
+            const posterSrc = rec.poster_url || (rec.poster_path ? (rec.poster_path.startsWith('http') ? rec.poster_path : 'https://image.tmdb.org/t/p/w500' + rec.poster_path) : '');
+            const hasPoster = Boolean(posterSrc);
+            const simScore = rec.similarity_percent ? `${rec.similarity_percent}%` : 'AI Match';
+            const genresStr = Array.isArray(rec.genres) ? rec.genres.join(', ') : (rec.genres_str || rec.genres || 'General');
+
+            card.innerHTML = `
+                <div class="poster-media position-relative">
+                    <div class="similarity-badge" title="Multi-Feature AI Score">
+                        <i class="fa-solid fa-chart-line me-1"></i> ${simScore}
+                    </div>
+                    ${hasPoster ? `<img src="${posterSrc}" alt="${escapeHtml(rec.title)}" class="poster-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">` : ''}
+                    <div class="poster-svg-fallback ${hasPoster ? 'd-none' : ''}">
+                        <i class="fa-solid fa-film text-cyan fs-1 mb-2 opacity-50"></i>
+                        <span class="fs-xs fw-bold text-white text-center px-2">${escapeHtml(rec.title)}</span>
+                    </div>
+                    <div class="poster-hover-overlay">
+                        <div class="overlay-actions d-flex flex-column gap-2 p-3 w-100">
+                            <button type="button" class="btn btn-cyan btn-sm rounded-pill w-100 btn-movie-details" data-movie-id="${rec.id}">
+                                <i class="fa-solid fa-circle-info me-1"></i> View Details
+                            </button>
+                            <button type="button" class="btn btn-outline-light btn-sm rounded-pill w-100 btn-watchlist-toggle" 
+                                    data-movie-id="${rec.id}" 
+                                    data-poster-path="${rec.poster_path || ''}"
+                                    data-is-added="${rec.is_in_watchlist ? 'true' : 'false'}">
+                                <i class="${rec.is_in_watchlist ? 'fa-solid' : 'fa-regular'} fa-bookmark me-1"></i> 
+                                ${rec.is_in_watchlist ? 'Saved' : 'Watchlist'}
+                            </button>
+                            <button type="button" class="btn btn-outline-cyan btn-sm rounded-pill w-100 btn-movie-similar" 
+                                    data-movie-id="${rec.id}" 
+                                    data-movie-title="${escapeHtml(rec.title)}">
+                                <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Similar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="poster-info pt-2 px-1">
+                    <h6 class="poster-title font-outfit text-white text-truncate mb-1" title="${escapeHtml(rec.title)}">${escapeHtml(rec.title)}</h6>
+                    <div class="d-flex align-items-center justify-content-between text-secondary fs-2xs mb-2">
+                        <span>
+                            <span class="badge bg-primary-subtle text-cyan border border-cyan-subtle fs-3xs me-1">${escapeHtml(rec.language_name || 'Cinema')}</span>
+                            ${rec.release_year || ''}
+                        </span>
+                        <span class="text-warning fw-semibold">
+                            <i class="fa-solid fa-star text-warning"></i> ${Number(rec.vote_average || 0).toFixed(1)}
+                        </span>
+                    </div>
+                    <div class="text-secondary fs-3xs text-truncate mb-1">${escapeHtml(genresStr)}</div>
+                    ${rec.explanation ? `
+                    <div class="movie-explanation-box fs-3xs">
+                        <i class="fa-solid fa-lightbulb text-cyan me-1"></i>
+                        <span>${escapeHtml(rec.explanation)}</span>
+                    </div>` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // Filter Buttons Event Delegation
+    document.querySelectorAll('.btn-filter-pill[data-filter-type]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const fType = this.getAttribute('data-filter-type');
+            const fVal = this.getAttribute('data-filter-val');
+
+            // Toggle active pill in this group
+            document.querySelectorAll(`.btn-filter-pill[data-filter-type="${fType}"]`).forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            if (fType === 'language') activeLang = fVal;
+            if (fType === 'genre') activeGenre = fVal;
+
+            applyFiltersAndRender();
+        });
+    });
+
+    // Sort Dropdown Change
+    if (sortSelect) {
+        sortSelect.addEventListener('change', function() {
+            activeSort = this.value;
+            applyFiltersAndRender();
+        });
+    }
+
+    // Reset Filters Button
+    const resetBtn = document.getElementById('resetResultsFiltersBtn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            activeLang = 'all';
+            activeGenre = 'all';
+            activeSort = 'similarity';
+            if (sortSelect) sortSelect.value = 'similarity';
+            document.querySelectorAll('.btn-filter-pill').forEach(b => {
+                b.classList.remove('active');
+                if (b.getAttribute('data-filter-val') === 'all') b.classList.add('active');
+            });
+            applyFiltersAndRender();
+        });
+    }
+
+    function escapeHtml(text) {
+        if (!text) return '';
+        return String(text)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
+});
+</script>
+{% endblock %}

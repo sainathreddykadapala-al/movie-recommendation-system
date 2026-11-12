@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}AI Recommendations - CineMatch AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <div class="text-center py-4 mb-4">
+        <div class="hero-badge-pill mb-3 d-inline-flex align-items-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles text-cyan"></i>
+            <span>Machine Learning Similarity & Clustering Engine</span>
+        </div>
+        <h1 class="font-outfit fw-bold text-white display-5 mb-2">Find Similar Movies</h1>
+        <p class="hero-sub-title text-secondary fs-6 mb-4 mx-auto" style="max-width: 680px;">
+            Input any film title. Our machine learning pipeline extracts 5,000-dimensional TF-IDF vectors, maps thematic clusters using K-Means, and ranks candidate films via angular Cosine Similarity.
+        </p>
+
+        <!-- Search Bar with Live Poster Typeahead -->
+        <div class="search-hero-wrapper position-relative mx-auto mb-4">
+            <form action="{{ url_for('recommendations.recommend') }}" method="GET" id="heroSearchForm">
+                <div class="search-bar-glass d-flex align-items-center">
+                    <i class="fa-solid fa-magnifying-glass search-bar-icon text-cyan"></i>
+                    <input type="text" class="search-bar-input" id="globalMovieSearch" name="movie" placeholder="Type a movie title (e.g., Inception, The Dark Knight, Interstellar, Avatar)..." autocomplete="off" required>
+                    <button type="submit" class="btn btn-cyan rounded-pill px-4 py-2 font-outfit fw-semibold search-bar-btn">
+                        <span>Recommend</span>
+                        <i class="fa-solid fa-wand-magic-sparkles ms-1"></i>
+                    </button>
+                </div>
+                <div id="heroSearchDropdown" class="search-autocomplete-dropdown text-start shadow-cyan-lg"></div>
+            </form>
+        </div>
+
+        <!-- Quick suggestion pills -->
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mt-3">
+            <span class="text-secondary fs-xs">Popular starting points:</span>
+            {% for item in popular_suggestions %}
+                <a href="{{ url_for('recommendations.recommend', movie=item.title) }}" class="btn btn-filter-pill fs-xs">
+                    {{ item.title }}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Suggested Benchmark Films Grid -->
+    <div class="mb-5">
+        <h4 class="font-outfit fw-bold text-white mb-3 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-fire text-cyan fs-5"></i>
+            <span>Benchmark Training Candidates</span>
+        </h4>
+        <div class="movie-grid-explore">
+            {% for movie in popular_suggestions %}
+            <div class="movie-poster-card" data-movie-id="{{ movie.id }}">
+                <div class="poster-media position-relative">
+                    <div class="card-rating-badge">
+                        <i class="fa-solid fa-star text-warning me-1"></i>
+                        <span>{{ "%.1f"|format(movie.vote_average) }}</span>
+                    </div>
+
+                    {% if movie.poster_url %}
+                    <img src="{{ movie.poster_url }}" alt="{{ movie.title }}" class="poster-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">
+                    {% endif %}
+                    <div class="poster-svg-fallback {% if movie.poster_url %}d-none{% endif %}">
+                        <i class="fa-solid fa-film text-cyan fs-1 mb-2 opacity-50"></i>
+                        <span class="fs-xs fw-bold text-white text-center px-2">{{ movie.title }}</span>
+                    </div>
+
+                    <div class="poster-hover-overlay">
+                        <div class="overlay-actions d-flex flex-column gap-2 p-3 w-100">
+                            <button type="button" class="btn btn-cyan btn-sm rounded-pill w-100 btn-movie-details" data-movie-id="{{ movie.id }}">
+                                <i class="fa-solid fa-circle-info me-1"></i> Details
+                            </button>
+                            <a href="{{ url_for('recommendations.recommend', movie=movie.title, movie_id=movie.id) }}" class="btn btn-outline-cyan btn-sm rounded-pill w-100">
+                                <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Run ML Recommender
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="poster-info pt-2 px-1">
+                    <h6 class="poster-title font-outfit text-white text-truncate mb-1" title="{{ movie.title }}">{{ movie.title }}</h6>
+                    <div class="d-flex align-items-center justify-content-between text-secondary fs-2xs mb-1">
+                        <span>{{ movie.release_year }}</span>
+                        <span class="badge bg-dark-subtle text-cyan fs-2xs">Cluster #{{ movie.cluster }}</span>
+                    </div>
+                    <div class="text-secondary fs-2xs text-truncate">{{ movie.genres_str }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Educational Pipeline Walkthrough Box -->
+    <div class="card bg-card-dark border-subtle rounded-4 p-4 shadow-lg mx-auto" style="max-width: 920px;">
+        <h5 class="font-outfit text-white mb-3 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-brain text-cyan"></i>
+            <span>Machine Learning Algorithm Mechanics</span>
+        </h5>
+        <div class="row g-3 text-secondary fs-xs">
+            <div class="col-md-4">
+                <div class="p-3 rounded-3 bg-dark-subtle border-subtle h-100">
+                    <div class="text-cyan fw-bold fs-sm mb-1"><i class="fa-solid fa-font me-1"></i> 1. TF-IDF Vectors</div>
+                    <p class="mb-0">Overview, director, cast, genres, and keywords are cleaned and transformed into 5,000-dimensional sparse feature vectors with stop-word filtering.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 rounded-3 bg-dark-subtle border-subtle h-100">
+                    <div class="text-cyan fw-bold fs-sm mb-1"><i class="fa-solid fa-diagram-project me-1"></i> 2. K-Means Clustering</div>
+                    <p class="mb-0">Unsupervised K-Means groups the 4,800 movies into 12 thematic clusters, narrowing down candidate pools efficiently.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 rounded-3 bg-dark-subtle border-subtle h-100">
+                    <div class="text-cyan fw-bold fs-sm mb-1"><i class="fa-solid fa-chart-line me-1"></i> 3. Cosine Similarity</div>
+                    <p class="mb-0">Measures the angular cosine similarity between feature vectors to rank top 10 recommendations with full metadata explanations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

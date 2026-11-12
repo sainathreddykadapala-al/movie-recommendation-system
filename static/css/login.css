@@ -1,0 +1,265 @@
+/* CineMatch AI - Clean Animated Login Scene (Reference Reproduction) */
+
+:root {
+    --bg-black: #000000;
+    --cyan-primary: #00f0ff;
+    --cyan-secondary: #0070f3;
+    --cyan-glow: rgba(0, 240, 255, 0.45);
+    --card-bg: rgba(9, 13, 23, 0.88);
+    --card-border: #00f0ff;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+}
+
+body.login-body {
+    background-color: #000000;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+/* ========================================================
+   CINEMATIC FULLSCREEN BACKGROUND WITH COMPLETE UNCROPPED ARTWORK
+   ======================================================== */
+.login-bg-media-blur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('../images/cinematch-logo.png') no-repeat center center;
+    background-size: cover;
+    z-index: 0;
+    pointer-events: none;
+    filter: brightness(0.35) contrast(1.1) blur(24px);
+    transform: scale(1.08); /* hide blur vignette edges */
+}
+
+.login-bg-media {
+    position: fixed;
+    top: 20px;
+    bottom: 35px;
+    left: 20px;
+    right: 20px;
+    background: url('../images/cinematch-logo.png') no-repeat center bottom;
+    background-size: contain; /* 100% complete image is guaranteed visible without cropping */
+    z-index: 1;
+    pointer-events: none;
+    filter: brightness(0.96) contrast(1.05);
+}
+
+.login-bg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.1) 0%, rgba(2, 6, 23, 0.25) 45%, rgba(0, 0, 0, 0.72) 80%, rgba(0, 0, 0, 0.88) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Three.js 3D Character & Background Canvas */
+.three-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+    pointer-events: none; /* Canvas doesn't block clicks */
+}
+
+/* Subtle Electric-Blue Radial Glow */
+.ambient-glow {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(150px);
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0.28;
+}
+
+.cyan-glow {
+    top: 15%;
+    left: 15%;
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, #00d2ff, transparent 70%);
+}
+
+/* Login Page Viewport */
+.login-page-wrapper {
+    position: relative;
+    z-index: 10;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 0;
+}
+
+
+
+/* ========================================================
+   COMPACT LOGIN CARD WITH ELECTRIC-BLUE GLOWING BORDER
+   ======================================================== */
+.glass-login-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    border: 1.8px solid var(--card-border);
+    border-radius: 20px;
+    padding: 2.25rem 2rem;
+    position: relative;
+    box-shadow: 0 0 35px rgba(0, 240, 255, 0.45), 0 20px 60px rgba(0, 0, 0, 0.95), inset 0 0 15px rgba(0, 240, 255, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 410px;
+    margin-left: auto;
+}
+
+.glass-login-card:hover {
+    box-shadow: 0 0 50px rgba(0, 240, 255, 0.65), 0 25px 70px rgba(0, 0, 0, 1), inset 0 0 20px rgba(0, 240, 255, 0.2);
+}
+
+/* Entrance Animation */
+@keyframes cardEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(25px) scale(0.97);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.animate-card-entrance {
+    animation: cardEntrance 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+
+
+@media (max-width: 991px) {
+    .login-brand-logo-container {
+        top: 0.75rem;
+        max-width: 95vw;
+    }
+    .project-header-logo {
+        max-height: 80px;
+    }
+}
+
+@media (max-width: 576px) {
+    .login-brand-logo-container {
+        top: 0.5rem;
+    }
+    .project-header-logo {
+        max-height: 65px;
+    }
+}
+
+/* Input Fields */
+.input-glow-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1.1rem;
+    color: #64748b;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.glass-input {
+    background: rgba(15, 23, 42, 0.65) !important;
+    border: 1px solid rgba(148, 163, 184, 0.2) !important;
+    border-radius: 12px !important;
+    color: #f8fafc !important;
+    padding: 0.75rem 1rem 0.75rem 2.8rem !important;
+    font-size: 0.9rem !important;
+    transition: all 0.3s ease !important;
+}
+
+.glass-input::placeholder {
+    color: #475569 !important;
+    font-size: 0.85rem;
+}
+
+.glass-input:focus {
+    background: rgba(15, 23, 42, 0.9) !important;
+    border-color: var(--cyan-primary) !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3) !important;
+}
+
+.glass-input:focus + .input-icon,
+.input-glow-wrapper:focus-within .input-icon {
+    color: var(--cyan-primary);
+}
+
+/* Password Toggle */
+.btn-toggle-password {
+    position: absolute;
+    right: 0.8rem;
+    background: transparent;
+    border: none;
+    color: #64748b;
+    padding: 0.4rem;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+    z-index: 5;
+}
+
+.btn-toggle-password:hover {
+    color: var(--cyan-primary);
+}
+
+/* Checkbox */
+.glass-checkbox {
+    background-color: rgba(15, 23, 42, 0.8) !important;
+    border-color: rgba(148, 163, 184, 0.3) !important;
+    border-radius: 6px !important;
+}
+
+.glass-checkbox:checked {
+    background-color: var(--cyan-primary) !important;
+    border-color: var(--cyan-primary) !important;
+}
+
+/* Electric-Blue Submit Button */
+.btn-cyan-glow {
+    background: linear-gradient(135deg, #00f0ff, #0070f3);
+    border: none;
+    color: #030712;
+    font-weight: 700;
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.4);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-cyan-glow:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(0, 240, 255, 0.65);
+    color: #000;
+}
+
+.btn-cyan-glow:active {
+    transform: translateY(0);
+}
+
+.glass-alert-card {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+    border-radius: 12px;
+}

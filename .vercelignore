@@ -1,0 +1,16 @@
+# Raw large CSV files (models/*.pkl already contains preprocessed data)
+data/raw/tmdb_5000_credits.csv
+data/raw/tmdb_5000_movies.csv
+
+# Large reference video
+static/reference/
+
+# Development & Testing
+tests/
+__pycache__/
+*.pyc
+.git
+.gitignore
+.env
+*.log
+
