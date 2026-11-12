@@ -21,3 +21,6 @@ static/reference/
 .vercel/
 .git_tool/
 tests/
+
+.vercel
+cinematch_ai_deploy.zip
