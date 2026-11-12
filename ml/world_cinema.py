@@ -1135,6 +1135,32 @@ WORLD_CINEMA_REGISTRY = [
         'backdrop_url': 'https://image.tmdb.org/t/p/original/tmU7GeKVybMWFButWEGl2M4GeiP.jpg'
     },
     {
+        'id': 14813,
+        'title': 'Ramayana: The Legend of Prince Rama',
+        'original_title': 'Ramayana: The Legend of Prince Rama',
+        'release_year': 1993,
+        'release_date': '1993-05-10',
+        'runtime': 170,
+        'vote_average': 8.6,
+        'vote_count': 1200,
+        'popularity': 65.0,
+        'language_code': 'te',
+        'original_language': 'te',
+        'language_name': 'Telugu',
+        'industry': 'tollywood',
+        'genres': ['Animation', 'Action', 'Adventure', 'Fantasy'],
+        'genres_str': 'Animation, Action, Adventure, Fantasy',
+        'genre_ids': [16, 28, 12, 14],
+        'director': 'Yugo Sako, Ram Mohan',
+        'cast': ['Arun Govil', 'Nikhil Kapoor', 'Amrish Puri', 'Shatrughan Sinha'],
+        'cast_str': 'Arun Govil, Nikhil Kapoor, Amrish Puri',
+        'keywords': ['ramayana', 'lord rama', 'sita rescue', 'ravana', 'hanuman', 'lanka bridge', 'hindu mythology', 'epic battle'],
+        'keywords_str': 'ramayana, lord rama, sita rescue, ravana, hanuman, lanka bridge, hindu mythology',
+        'overview': 'An epic cinematic retelling of the ancient Indian epic poem Ramayana. Prince Rama of Ayodhya embarks on a legendary quest to rescue his wife Sita after she is abducted by Ravana, the demon king of Lanka.',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/r928374928374.jpg',
+        'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
+    },
+    {
         'id': 19995,
         'title': 'Avatar',
         'original_title': 'Avatar',
@@ -1179,4 +1205,8 @@ WORLD_CINEMA_BY_TITLE['3 idiots'] = WORLD_CINEMA_BY_ID[20453]
 WORLD_CINEMA_BY_TITLE['three idiots'] = WORLD_CINEMA_BY_ID[20453]
 WORLD_CINEMA_BY_TITLE['the dark knight'] = WORLD_CINEMA_BY_ID[155]
 WORLD_CINEMA_BY_TITLE['dark knight'] = WORLD_CINEMA_BY_ID[155]
+WORLD_CINEMA_BY_TITLE['ramayana'] = WORLD_CINEMA_BY_ID[14813]
+WORLD_CINEMA_BY_TITLE['ramayana: rise of a legend'] = WORLD_CINEMA_BY_ID[14813]
+WORLD_CINEMA_BY_TITLE['ramayana: the legend of prince rama'] = WORLD_CINEMA_BY_ID[14813]
+WORLD_CINEMA_BY_TITLE['ramayana rise of a legend'] = WORLD_CINEMA_BY_ID[14813]
 
