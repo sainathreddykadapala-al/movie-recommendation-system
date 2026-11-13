@@ -185,9 +185,10 @@ def calculate_multi_feature_similarity(target_movie, candidate_movie, weights=No
         explanation = f"Curated from {cand_lang} Cinema based on matching thematic storyline and narrative structure."
 
     return {
-        'similarity_score': round(float(total_score), 4),
+        'similarity_score': calibrated_percent,
         'similarity_percent': calibrated_percent,
-        'similarity_label': f"{calibrated_percent}% Similarity",
+        'raw_score': round(float(total_score), 4),
+        'similarity_label': f"{calibrated_percent}% Match",
         'explanation': explanation,
         'genre_score': round(genre_score, 3),
         'overview_score': round(overview_score, 3),

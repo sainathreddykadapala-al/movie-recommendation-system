@@ -72,17 +72,17 @@ LANGUAGE_MAP = {
 
 # Industry to Filter Mapping
 INDUSTRY_MAP = {
-    'tollywood': {'with_original_language': 'te', 'region': 'IN', 'label': 'Tollywood (Telugu)'},
-    'bollywood': {'with_original_language': 'hi', 'region': 'IN', 'label': 'Bollywood (Hindi)'},
-    'kollywood': {'with_original_language': 'ta', 'region': 'IN', 'label': 'Kollywood (Tamil)'},
-    'mollywood': {'with_original_language': 'ml', 'region': 'IN', 'label': 'Mollywood (Malayalam)'},
-    'sandalwood': {'with_original_language': 'kn', 'region': 'IN', 'label': 'Sandalwood (Kannada)'},
-    'bengali': {'with_original_language': 'bn', 'region': 'IN', 'label': 'Bengali Cinema'},
-    'marathi': {'with_original_language': 'mr', 'region': 'IN', 'label': 'Marathi Cinema'},
-    'punjabi': {'with_original_language': 'pa', 'region': 'IN', 'label': 'Punjabi Cinema'},
-    'hollywood': {'with_original_language': 'en', 'with_origin_country': 'US', 'label': 'Hollywood (USA)'},
-    'korean': {'with_original_language': 'ko', 'with_origin_country': 'KR', 'label': 'Korean Cinema'},
-    'japanese': {'with_original_language': 'ja', 'with_origin_country': 'JP', 'label': 'Japanese Cinema'},
+    'tollywood': {'with_original_language': 'te', 'label': 'Tollywood (Telugu)'},
+    'bollywood': {'with_original_language': 'hi', 'label': 'Bollywood (Hindi)'},
+    'kollywood': {'with_original_language': 'ta', 'label': 'Kollywood (Tamil)'},
+    'mollywood': {'with_original_language': 'ml', 'label': 'Mollywood (Malayalam)'},
+    'sandalwood': {'with_original_language': 'kn', 'label': 'Sandalwood (Kannada)'},
+    'bengali': {'with_original_language': 'bn', 'label': 'Bengali Cinema'},
+    'marathi': {'with_original_language': 'mr', 'label': 'Marathi Cinema'},
+    'punjabi': {'with_original_language': 'pa', 'label': 'Punjabi Cinema'},
+    'hollywood': {'with_original_language': 'en', 'label': 'Hollywood (USA)'},
+    'korean': {'with_original_language': 'ko', 'label': 'Korean Cinema'},
+    'japanese': {'with_original_language': 'ja', 'label': 'Japanese Cinema'},
     'chinese': {'with_original_language': 'zh', 'label': 'Chinese Cinema'},
     'french': {'with_original_language': 'fr', 'label': 'French Cinema'},
     'spanish': {'with_original_language': 'es', 'label': 'Spanish Cinema'},
@@ -256,28 +256,28 @@ class TMDBService:
     # API Methods for Cinematic Featured Sections & Home
     # ----------------------------------------------------
     def get_trending(self, time_window='week', page=1):
-        """Fetches trending movies of the day or week."""
+        """Fetches trending movies of the day or week, with automatic local fallback."""
         data = self._make_request(f"/trending/movie/{time_window}", {'page': page})
-        if data and 'results' in data:
+        if data and 'results' in data and data['results']:
             return self.format_movie_list(data['results'])
-        return []
+        return self._local_discover(sort_by='popularity.desc', page=page)['results'][:12]
 
     def get_latest_releases(self, page=1):
-        """Fetches now playing and latest released movies."""
+        """Fetches now playing and latest released movies, with automatic local fallback."""
         data = self._make_request("/movie/now_playing", {'language': 'en-US', 'page': page})
-        if data and 'results' in data:
+        if data and 'results' in data and data['results']:
             return self.format_movie_list(data['results'])
-        return []
+        return self._local_discover(period='latest', sort_by='latest', page=page)['results'][:12]
 
     def get_top_rated(self, page=1):
-        """Fetches top-rated movies of all time."""
+        """Fetches top-rated movies of all time, with automatic local fallback."""
         data = self._make_request("/movie/top_rated", {'language': 'en-US', 'page': page})
-        if data and 'results' in data:
+        if data and 'results' in data and data['results']:
             return self.format_movie_list(data['results'])
-        return []
+        return self._local_discover(sort_by='rating', page=page)['results'][:12]
 
     def get_by_language_and_industry(self, lang_code=None, industry_key=None, page=1):
-        """Fetches popular movies by specific language code or film industry."""
+        """Fetches popular movies by specific language code or film industry, with automatic local fallback."""
         params = {
             'sort_by': 'popularity.desc',
             'page': page,
@@ -292,12 +292,12 @@ class TMDBService:
             params['with_original_language'] = lang_code
 
         data = self._make_request("/discover/movie", params)
-        if data and 'results' in data:
+        if data and 'results' in data and data['results']:
             return self.format_movie_list(data['results'])
-        return []
+        return self._local_discover(language=lang_code, industry=industry_key, page=page)['results'][:12]
 
     def get_classics(self, page=1):
-        """Fetches classic movies released before the year 2000."""
+        """Fetches classic movies released before the year 2000, with automatic local fallback."""
         params = {
             'sort_by': 'vote_average.desc',
             'vote_count.gte': 1000,
@@ -305,12 +305,12 @@ class TMDBService:
             'page': page
         }
         data = self._make_request("/discover/movie", params)
-        if data and 'results' in data:
+        if data and 'results' in data and data['results']:
             return self.format_movie_list(data['results'])
-        return []
+        return self._local_discover(period='classic', sort_by='rating', page=page)['results'][:12]
 
     def get_anime_and_animation(self, page=1):
-        """Fetches animated movies and anime."""
+        """Fetches animated movies and anime, with automatic local fallback."""
         params = {
             'with_genres': '16',
             'sort_by': 'popularity.desc',
@@ -318,9 +318,9 @@ class TMDBService:
             'page': page
         }
         data = self._make_request("/discover/movie", params)
-        if data and 'results' in data:
+        if data and 'results' in data and data['results']:
             return self.format_movie_list(data['results'])
-        return []
+        return self._local_discover(industry='anime', page=page)['results'][:12]
 
     # ----------------------------------------------------
     # Multi-Filter Discovery Engine
@@ -333,6 +333,7 @@ class TMDBService:
         - Multiple Genres
         - Release Period
         - Sort By
+        First attempts TMDB API, then seamlessly falls back to local cinema catalog if offline or empty.
         """
         params = {
             'page': page
@@ -373,25 +374,155 @@ class TMDBService:
             params['primary_release_date.gte'] = '2016-01-01'
             params['primary_release_date.lte'] = '2024-12-31'
         elif period == 'latest':
-            params['primary_release_date.gte'] = '2025-01-01'
+            params['primary_release_date.gte'] = '2024-01-01'
         elif period and str(period).isdigit():
             params['primary_release_year'] = int(period)
 
         data = self._make_request("/discover/movie", params)
-        if data and 'results' in data:
+        if data and 'results' in data and data['results']:
             return {
                 'page': data.get('page', 1),
                 'total_pages': min(data.get('total_pages', 1), 50),
                 'total_results': data.get('total_results', 0),
                 'results': self.format_movie_list(data['results'])
             }
-        return {'page': 1, 'total_pages': 1, 'total_results': 0, 'results': []}
+
+        # Fallback to rich local database & World Cinema registry
+        return self._local_discover(language=language, industry=industry, genre_ids=genre_ids, period=period, sort_by=sort_by, page=page)
+
+    def _local_discover(self, language=None, industry=None, genre_ids=None, period=None, sort_by='popularity.desc', page=1):
+        """
+        High-performance local discovery engine querying WORLD_CINEMA_REGISTRY and 4800-movie database.
+        Guarantees instant, accurate results regardless of network connectivity or TMDB API restrictions.
+        """
+        import math
+        from ml.world_cinema import WORLD_CINEMA_REGISTRY
+
+        candidates = []
+        seen_ids = set()
+
+        # 1. Load curated World Cinema Registry entries
+        for m in WORLD_CINEMA_REGISTRY:
+            m_copy = dict(m)
+            cid = m_copy.get('id')
+            if cid and cid not in seen_ids:
+                seen_ids.add(cid)
+                candidates.append(m_copy)
+
+        # 2. Supplement from 4,800 local processed movies
+        try:
+            from ml.recommendation import MovieRecommender
+            recommender = MovieRecommender.get_instance()
+            if recommender.is_loaded and recommender.df is not None:
+                for _, row in recommender.df.iterrows():
+                    cid = int(row.get('id', 0))
+                    if cid and cid not in seen_ids:
+                        seen_ids.add(cid)
+                        candidates.append(row.to_dict())
+        except Exception:
+            pass
+
+        # 3. Determine target language / industry constraint
+        target_lang = None
+        if industry and industry in INDUSTRY_MAP:
+            target_lang = INDUSTRY_MAP[industry].get('with_original_language')
+        elif language:
+            target_lang = str(language).strip().lower()
+
+        filtered = []
+        for c in candidates:
+            c_lang = str(c.get('language_code') or c.get('original_language', '')).lower()
+            c_ind = str(c.get('industry', '')).lower()
+
+            # Industry/Language filter
+            if industry:
+                if industry in ['anime', 'animation', 'family_animation']:
+                    c_genres = [str(g).lower() for g in c.get('genres', [])]
+                    c_gids = [str(gid) for gid in c.get('genre_ids', [])]
+                    if 'animation' not in c_genres and '16' not in c_gids:
+                        continue
+                else:
+                    if target_lang and c_lang != target_lang and c_ind != industry:
+                        continue
+            elif target_lang:
+                if c_lang != target_lang:
+                    continue
+
+            # Genre filter
+            if genre_ids:
+                c_genre_ids = [str(gid) for gid in c.get('genre_ids', [])]
+                c_genre_names = [str(g).lower() for g in c.get('genres', [])]
+                target_g_ids = [str(g) for g in (genre_ids if isinstance(genre_ids, list) else [genre_ids])]
+
+                match = False
+                for gid in target_g_ids:
+                    if gid in c_genre_ids:
+                        match = True
+                        break
+                    g_name = GENRE_MAP.get(int(gid) if gid.isdigit() else 0, gid).lower()
+                    if any(g_name in c_gn for c_gn in c_genre_names):
+                        match = True
+                        break
+                if not match:
+                    continue
+
+            # Period filter
+            rel_year = int(c.get('release_year', 0) or 0)
+            if period == 'latest':
+                if rel_year < 2021:
+                    continue
+            elif period == '2016-2024':
+                if not (2016 <= rel_year <= 2024):
+                    continue
+            elif period == '2000-2015':
+                if not (2000 <= rel_year <= 2015):
+                    continue
+            elif period == 'classic':
+                if rel_year > 1999:
+                    continue
+            elif period and str(period).isdigit():
+                if rel_year != int(period):
+                    continue
+
+            filtered.append(c)
+
+        # Smart relaxation: if strict period filter left 0 items for this industry/language, relax period
+        if not filtered and (language or industry):
+            for c in candidates:
+                c_lang = str(c.get('language_code') or c.get('original_language', '')).lower()
+                c_ind = str(c.get('industry', '')).lower()
+                if (target_lang and c_lang == target_lang) or (industry and c_ind == industry):
+                    filtered.append(c)
+
+        # 4. Sorting
+        if sort_by in ['latest', 'primary_release_date.desc']:
+            filtered.sort(key=lambda x: (int(x.get('release_year', 0) or 0), float(x.get('popularity', 0) or 0)), reverse=True)
+        elif sort_by in ['rating', 'vote_average.desc']:
+            filtered.sort(key=lambda x: (float(x.get('vote_average', 0) or 0), float(x.get('popularity', 0) or 0)), reverse=True)
+        else:
+            filtered.sort(key=lambda x: float(x.get('popularity', 0) or 0), reverse=True)
+
+        total_results = len(filtered)
+        page_size = 20
+        total_pages = max(1, math.ceil(total_results / page_size))
+        start_idx = (page - 1) * page_size
+        end_idx = start_idx + page_size
+        paged_candidates = filtered[start_idx:end_idx]
+
+        formatted_results = [self.enrich_movie(dict(m)) for m in paged_candidates]
+
+        return {
+            'page': page,
+            'total_pages': total_pages,
+            'total_results': total_results,
+            'results': formatted_results
+        }
 
     # ----------------------------------------------------
     # Search, Details & Similar Movies
     # ----------------------------------------------------
     def search(self, query, page=1):
-        """Searches movies by title or original title."""
+        """Searches movies by title or original title with automatic local fallback."""
         if not query or len(str(query).strip()) < 1:
             return []
         data = self._make_request("/search/movie", {
@@ -399,9 +530,39 @@ class TMDBService:
             'page': page,
             'include_adult': False
         })
-        if data and 'results' in data:
+        if data and 'results' in data and data['results']:
             return self.format_movie_list(data['results'])
-        return []
+        return self._local_search(query, page=page)
+
+    def _local_search(self, query, page=1):
+        """Searches local World Cinema registry and local processed movies."""
+        from ml.world_cinema import WORLD_CINEMA_REGISTRY
+        q = str(query).strip().lower()
+        matches = []
+        seen = set()
+
+        for m in WORLD_CINEMA_REGISTRY:
+            m_title = str(m.get('title', '')).lower()
+            m_orig = str(m.get('original_title', '')).lower()
+            if q in m_title or q in m_orig:
+                if m['id'] not in seen:
+                    seen.add(m['id'])
+                    matches.append(self.enrich_movie(dict(m)))
+
+        try:
+            from ml.recommendation import MovieRecommender
+            recommender = MovieRecommender.get_instance()
+            if recommender.is_loaded and recommender.df is not None:
+                sub = recommender.df[recommender.df['title'].str.lower().str.contains(q, na=False)].head(15)
+                for _, row in sub.iterrows():
+                    cid = int(row.get('id', 0))
+                    if cid and cid not in seen:
+                        seen.add(cid)
+                        matches.append(self.enrich_movie(row.to_dict()))
+        except Exception:
+            pass
+
+        return matches[:15]
 
     def get_details(self, movie_id):
         """Fetches full movie details including credits (cast, director), keywords, and recommendations."""
@@ -409,7 +570,63 @@ class TMDBService:
             'append_to_response': 'credits,similar,keywords,recommendations'
         })
         if not data:
-            return None
+            return self._local_get_details(movie_id)
+
+        formatted = self.format_movie(data)
+
+        # Extract runtime
+        formatted['runtime'] = data.get('runtime', 120) or 120
+
+        # Extract Director and top cast from credits
+        director = "Unknown"
+        cast_list = []
+        if 'credits' in data:
+            crew = data['credits'].get('crew', [])
+            for c in crew:
+                if c.get('job') == 'Director':
+                    director = c.get('name', 'Unknown')
+                    break
+            cast = data['credits'].get('cast', [])
+            cast_list = [member.get('name') for member in cast[:6] if member.get('name')]
+
+        formatted['director'] = director
+        formatted['cast'] = cast_list
+        formatted['cast_str'] = ", ".join(cast_list) if cast_list else "Not listed"
+
+        # Extract keywords
+        keywords_list = []
+        if 'keywords' in data:
+            raw_kw = data['keywords'].get('keywords') or data['keywords'].get('results') or []
+            keywords_list = [k.get('name') for k in raw_kw if k.get('name')]
+        formatted['keywords'] = keywords_list
+
+        # Extract Similar Movies & Recommendations
+        similar_movies = []
+        if 'similar' in data and 'results' in data['similar']:
+            similar_movies = self.format_movie_list(data['similar']['results'][:10])
+        if 'recommendations' in data and 'results' in data['recommendations']:
+            rec_movies = self.format_movie_list(data['recommendations']['results'][:10])
+            for r in rec_movies:
+                if r['id'] not in [s['id'] for s in similar_movies]:
+                    similar_movies.append(r)
+        formatted['similar_movies'] = similar_movies
+        return formatted
+
+    def _local_get_details(self, movie_id):
+        """Fallback movie detail resolver using local World Cinema registry and 4800-movie dataset."""
+        from ml.world_cinema import WORLD_CINEMA_BY_ID
+        if movie_id in WORLD_CINEMA_BY_ID:
+            return self.enrich_movie(dict(WORLD_CINEMA_BY_ID[movie_id]))
+
+        try:
+            from ml.recommendation import MovieRecommender
+            recommender = MovieRecommender.get_instance()
+            local_m = recommender.get_movie_by_id(movie_id)
+            if local_m:
+                return self.enrich_movie(dict(local_m))
+        except Exception:
+            pass
+        return None
 
         formatted = self.format_movie(data)
 
