@@ -112,6 +112,39 @@ class RecommendationHistory(Base):
             'created_at': self.created_at.strftime('%Y-%m-%d %H:%M:%S') if self.created_at else None
         }
 
+class GenreOverride(Base):
+    __tablename__ = 'genre_overrides'
+
+    id = Column(Integer, primary_key=True)
+    movie_id = Column(Integer, unique=True, nullable=False, index=True)
+    movie_title = Column(String(255), nullable=False)
+    genres_json = Column(Text, nullable=False)  # JSON list of genre names
+    genres_str = Column(String(255), nullable=False)
+    notes = Column(Text, nullable=True)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
+
+    def get_genres(self):
+        try:
+            return json.loads(self.genres_json)
+        except Exception:
+            return [g.strip() for g in self.genres_str.split(',') if g.strip()]
+
+    def set_genres(self, genres_list):
+        if isinstance(genres_list, str):
+            genres_list = [g.strip() for g in genres_list.split(',') if g.strip()]
+        self.genres_json = json.dumps(genres_list)
+        self.genres_str = ", ".join(genres_list)
+
+    def to_dict(self):
+        return {
+            'movie_id': self.movie_id,
+            'movie_title': self.movie_title,
+            'genres': self.get_genres(),
+            'genres_str': self.genres_str,
+            'notes': self.notes,
+            'updated_at': self.updated_at.strftime('%Y-%m-%d %H:%M:%S') if self.updated_at else None
+        }
+
 # Database engine and session factory
 try:
     os.makedirs(os.path.dirname(Config.DATABASE_PATH), exist_ok=True)
@@ -122,5 +155,8 @@ db_session = scoped_session(sessionmaker(autocommit=False, autoflush=False, expi
 
 def init_db():
     """Creates database tables if they do not exist."""
-    Base.metadata.create_all(bind=engine)
-    print(f"[SUCCESS] Database tables verified at {Config.DATABASE_PATH}")
+    try:
+        Base.metadata.create_all(bind=engine)
+        print(f"[SUCCESS] Database tables verified at {Config.DATABASE_PATH}")
+    except Exception as e:
+        print(f"[!] init_db warning (read-only environment): {e}")

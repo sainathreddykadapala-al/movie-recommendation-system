@@ -1,8 +1,13 @@
 import os
 import sys
 
-# Add project root directory to Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Ensure root directory is on Python path
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
+
+# Explicitly flag serverless environment
+os.environ['VERCEL'] = '1'
 
 from app import app
 

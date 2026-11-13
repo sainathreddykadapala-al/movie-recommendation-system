@@ -377,6 +377,10 @@
 
     <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Dynamic Production Backend Configuration -->
+    <script>
+        window.CINEMATCH_API_BASE = "{{ config.get('PRODUCTION_BACKEND_URL', '') }}";
+    </script>
     <!-- Custom Global JS -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% block extra_js %}{% endblock %}

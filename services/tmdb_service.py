@@ -151,11 +151,11 @@ class TMDBService:
         }
 
     def _make_request(self, endpoint, params=None):
-        """Sends authenticated request to TMDB API with error handling, retries and caching."""
+        """Sends authenticated request to TMDB API with circuit-breaker error handling, fast timeout and caching."""
         if not self.api_key or self.api_key == 'YOUR_TMDB_API_KEY_HERE':
             return None
 
-        # Circuit breaker: if network is currently failing or blocked, return immediately
+        # Circuit breaker: if network is currently failing, throttled or blocked, return immediately
         if hasattr(self, '_network_offline_until') and time.time() < self._network_offline_until:
             return None
 
@@ -168,27 +168,22 @@ class TMDBService:
             return cached
 
         url = f"{self.base_url}{endpoint}"
-        for attempt in range(2):
-            try:
-                resp = self.session.get(url, params=params, timeout=2.0)
-                if resp.status_code == 200:
-                    data = resp.json()
-                    self._set_cache(cache_key, data)
-                    return data
-                elif resp.status_code == 429:
-                    time.sleep(0.3)
-                else:
-                    break
-            except Exception as e:
-                err_str = str(e)
-                if "WinError 10013" in err_str or "Failed to establish" in err_str or "Max retries exceeded" in err_str:
-                    self._network_offline_until = time.time() + 30
-                    return None
-                if attempt == 0:
-                    time.sleep(0.1)
-                else:
-                    print(f"[-] TMDB API request error for {endpoint}: {e}")
-        return None
+        try:
+            resp = self.session.get(url, params=params, timeout=1.2)
+            if resp.status_code == 200:
+                data = resp.json()
+                self._set_cache(cache_key, data)
+                return data
+            elif resp.status_code == 429:
+                return None
+            else:
+                return None
+        except Exception as e:
+            err_str = str(e)
+            # Trip circuit breaker on any network reset, timeout or host unreachable
+            if any(k in err_str for k in ["WinError", "10054", "10013", "10061", "Failed to establish", "Max retries", "timeout", "timed out", "ConnectionResetError", "RemoteDisconnected"]):
+                self._network_offline_until = time.time() + 60
+            return None
 
     def format_movie(self, item):
         """Standardizes a movie object from TMDB API with rich multi-language metadata."""
@@ -627,47 +622,6 @@ class TMDBService:
         except Exception:
             pass
         return None
-
-        formatted = self.format_movie(data)
-
-        # Extract runtime
-        formatted['runtime'] = data.get('runtime', 120) or 120
-
-        # Extract Director and top cast from credits
-        director = "Unknown"
-        cast_list = []
-        if 'credits' in data:
-            crew = data['credits'].get('crew', [])
-            for c in crew:
-                if c.get('job') == 'Director':
-                    director = c.get('name', 'Unknown')
-                    break
-            cast = data['credits'].get('cast', [])
-            cast_list = [member.get('name') for member in cast[:6] if member.get('name')]
-
-        formatted['director'] = director
-        formatted['cast'] = cast_list
-        formatted['cast_str'] = ", ".join(cast_list) if cast_list else "Not listed"
-
-        # Extract keywords
-        keywords_list = []
-        if 'keywords' in data:
-            raw_kw = data['keywords'].get('keywords') or data['keywords'].get('results') or []
-            keywords_list = [k.get('name') for k in raw_kw if k.get('name')]
-        formatted['keywords'] = keywords_list
-
-        # Extract Similar Movies & Recommendations
-        similar_movies = []
-        if 'similar' in data and 'results' in data['similar']:
-            similar_movies = self.format_movie_list(data['similar']['results'][:10])
-        if 'recommendations' in data and 'results' in data['recommendations']:
-            rec_movies = self.format_movie_list(data['recommendations']['results'][:10])
-            for r in rec_movies:
-                if r['id'] not in [s['id'] for s in similar_movies]:
-                    similar_movies.append(r)
-
-        formatted['similar_movies'] = similar_movies
-        return formatted
 
     def get_similar(self, movie_id, limit=10):
         """Fetches API-based similar movies from TMDB."""

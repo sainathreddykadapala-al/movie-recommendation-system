@@ -110,7 +110,6 @@ def explore():
     )
 
 @main_bp.route('/api/discover')
-@login_required
 def api_discover():
     language = request.args.get('language', '')
     industry = request.args.get('industry', '')
@@ -133,15 +132,19 @@ def api_discover():
     user = get_current_user()
     watchlist_ids = set([w.movie_id for w in db_session.query(Watchlist.movie_id).filter_by(user_id=user.id).all()]) if user else set()
 
+    from services.json_sanitizer import sanitize_movie_dict
+    sanitized_movies = []
     for m in result.get('results', []):
-        m['in_watchlist'] = m['id'] in watchlist_ids
+        sm = sanitize_movie_dict(m)
+        sm['in_watchlist'] = sm['id'] in watchlist_ids
+        sanitized_movies.append(sm)
 
     return jsonify({
         'success': True,
         'page': result.get('page', 1),
         'total_pages': result.get('total_pages', 1),
         'total_results': result.get('total_results', 0),
-        'movies': result.get('results', [])
+        'movies': sanitized_movies
     })
 
 @main_bp.route('/api/search-tmdb')

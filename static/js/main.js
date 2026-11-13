@@ -561,8 +561,9 @@ function openSimilarMoviesModal(movieId, movieTitle, triggerBtn) {
     if (errorState) errorState.classList.add('d-none');
     if (contentState) contentState.classList.add('d-none');
 
-    // Call Global Recommendation Endpoint
-    const endpoint = `/api/movies/${encodeURIComponent(movieId || 'title')}/similar`;
+    // Call Global Recommendation Endpoint with dynamic environment-driven base URL
+    const apiBase = (window.CINEMATCH_API_BASE || '').replace(/\/+$/, '');
+    const endpoint = `${apiBase}/api/movies/${encodeURIComponent(movieId || 'title')}/similar`;
     fetch(endpoint, {
         method: 'POST',
         headers: {
@@ -574,18 +575,27 @@ function openSimilarMoviesModal(movieId, movieTitle, triggerBtn) {
             title: movieTitle
         })
     })
-    .then(res => res.json().then(data => ({ status: res.status, ok: res.ok, data: data })))
+    .then(async res => {
+        let data = null;
+        try {
+            data = await res.json();
+        } catch(parseErr) {
+            console.error('Non-JSON response from server:', parseErr);
+        }
+        return { status: res.status, ok: res.ok, data: data };
+    })
     .then(result => {
         const data = result.data;
         if (!data || !data.success || !data.recommendations || data.recommendations.length === 0) {
-            showSimilarError(data ? (data.error || 'No similar movies found for this title.') : 'Service unavailable.', movieId, movieTitle);
+            const errDetail = data ? (data.error || 'No similar movies found matching this title.') : `Service response error (Status: ${result.status}).`;
+            showSimilarError(errDetail, movieId, movieTitle);
             return;
         }
         renderSimilarMoviesContent(data);
     })
     .catch(err => {
         console.error('Error fetching similar movies:', err);
-        showSimilarError('A connection error occurred while generating recommendations. Please retry.', movieId, movieTitle);
+        showSimilarError(err.message || 'A connection error occurred while generating recommendations. Please retry.', movieId, movieTitle);
     })
     .finally(() => {
         if (triggerBtn) {
@@ -639,16 +649,16 @@ function renderSimilarMoviesContent(data) {
     if (sortSelect) sortSelect.value = 'similarity';
 
     // Header updates
+    const sel = data.selected_movie || data.movie || {};
     const headingEl = document.getElementById('similarModalTargetTitle');
     const subtitleEl = document.getElementById('similarModalSubtitle');
 
-    if (headingEl) headingEl.textContent = data.selected_movie.title;
+    if (headingEl) headingEl.textContent = sel.title || 'Selected Movie';
     if (subtitleEl) {
         subtitleEl.innerHTML = `Multi-Feature AI Engine: 30% Genre &bull; 30% Storyline &bull; 20% Keywords &bull; 10% Cast &bull; 10% Director across World Cinema`;
     }
 
     // Selected Movie Anchor Banner
-    const sel = data.selected_movie;
     const selPoster = document.getElementById('similarSelectedPoster');
     const selFallback = document.getElementById('similarSelectedFallback');
     const posterSrc = sel.poster_url || (sel.poster_path ? (sel.poster_path.startsWith('http') ? sel.poster_path : 'https://image.tmdb.org/t/p/w300' + sel.poster_path) : '');
@@ -681,8 +691,10 @@ function renderSimilarMoviesContent(data) {
 
     const selSource = document.getElementById('similarSelectedSourceBadge');
     if (selSource) {
-        selSource.className = 'badge bg-cyan-subtle text-cyan fs-2xs px-2 py-1 rounded-pill';
-        selSource.innerHTML = `<i class="fa-solid fa-brain me-1"></i> Global Multi-Feature AI`;
+        const srcText = sel.metadata_source || 'Multi-Feature AI';
+        const isOverride = Boolean(sel.is_manual_override);
+        selSource.className = isOverride ? 'badge bg-warning-subtle text-warning border border-warning-subtle fs-2xs px-2 py-1 rounded-pill' : 'badge bg-cyan-subtle text-cyan fs-2xs px-2 py-1 rounded-pill';
+        selSource.innerHTML = isOverride ? `<i class="fa-solid fa-user-check me-1"></i> ${escapeHtml(srcText)}` : `<i class="fa-solid fa-shield-halved me-1"></i> ${escapeHtml(srcText)}`;
     }
 
     const selOverview = document.getElementById('similarSelectedOverview');

@@ -13,18 +13,89 @@ if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
 from config import Config
-from services.tmdb_service import tmdb_service, LANGUAGE_MAP, GENRE_MAP
-from ml.world_cinema import WORLD_CINEMA_REGISTRY, WORLD_CINEMA_BY_ID, WORLD_CINEMA_BY_TITLE
 
-# Suggested starting weights according to requirement:
-# Genre: 30%, Storyline and overview: 30%, Keywords: 20%, Cast: 10%, Director: 10%
+try:
+    from services.tmdb_service import tmdb_service, LANGUAGE_MAP, GENRE_MAP
+except (ImportError, ModuleNotFoundError):
+    from tmdb_service import tmdb_service, LANGUAGE_MAP, GENRE_MAP
+
+try:
+    from services.metadata_service import metadata_service
+except (ImportError, ModuleNotFoundError):
+    try:
+        from metadata_service import metadata_service
+    except Exception:
+        metadata_service = None
+
+try:
+    from services.json_sanitizer import sanitize_movie_dict, sanitize_recommendation_response
+except (ImportError, ModuleNotFoundError):
+    try:
+        from json_sanitizer import sanitize_movie_dict, sanitize_recommendation_response
+    except Exception:
+        sanitize_movie_dict = lambda x: x
+        sanitize_recommendation_response = lambda x: x
+
+try:
+    from ml.world_cinema import WORLD_CINEMA_REGISTRY, WORLD_CINEMA_BY_ID, WORLD_CINEMA_BY_TITLE
+except (ImportError, ModuleNotFoundError):
+    from world_cinema import WORLD_CINEMA_REGISTRY, WORLD_CINEMA_BY_ID, WORLD_CINEMA_BY_TITLE
+
+# Exact requirement weights:
+# Genre: 30%, Storyline / overview: 30%, Keywords / themes: 20%, Cast / Director: 10%, Cluster affinity: 10%
 DEFAULT_SIMILARITY_WEIGHTS = {
     'genre': 0.30,
     'overview': 0.30,
     'keywords': 0.20,
-    'cast': 0.10,
-    'director': 0.10
+    'cast': 0.05,
+    'director': 0.05,
+    'cluster': 0.10
 }
+
+def is_genre_compatible(target_movie, candidate_movie):
+    """
+    Validates whether a candidate movie shares significant genre characteristics
+    with the target movie and prevents incompatible genre combinations.
+    
+    Rules:
+    - Candidate must share at least one primary or secondary genre with target.
+    - Pure Romance / Drama cannot be matched with pure Horror / Crime.
+    - Animation / Family cannot be matched with pure Horror / Crime (unless target has horror).
+    - Pure Horror cannot be matched with pure Romance / Family (unless target has romance).
+    """
+    def normalize_g(m):
+        g = m.get('genres') or m.get('genre_list') or []
+        if isinstance(g, str):
+            g = [x.strip() for x in g.split(',') if x.strip()]
+        return set([str(x).lower().strip() for x in g])
+
+    genres_t = normalize_g(target_movie)
+    genres_c = normalize_g(candidate_movie)
+
+    # If neither movie has genre info, permit fallback
+    if not genres_t or not genres_c:
+        return True, "Permitted: genre data unavailable"
+
+    shared = genres_t.intersection(genres_c)
+    if not shared:
+        return False, f"Incompatible: no shared genres (target: {list(genres_t)}, candidate: {list(genres_c)})"
+
+    # Genre conflict checks
+    is_target_romance_drama = any(g in genres_t for g in ['romance', 'drama']) and not any(g in genres_t for g in ['horror', 'crime', 'thriller', 'action'])
+    is_cand_pure_horror_crime = any(g in genres_c for g in ['horror', 'crime']) and not any(g in genres_c for g in ['romance', 'drama', 'comedy', 'family'])
+    if is_target_romance_drama and is_cand_pure_horror_crime:
+        return False, "Incompatible: Romance/Drama cannot match pure Horror/Crime"
+
+    is_target_family_anim = any(g in genres_t for g in ['animation', 'family']) and not any(g in genres_t for g in ['horror', 'crime'])
+    if is_target_family_anim and is_cand_pure_horror_crime:
+        return False, "Incompatible: Animation/Family cannot match pure Horror/Crime"
+
+    is_target_horror = 'horror' in genres_t and not any(g in genres_t for g in ['romance', 'family', 'comedy'])
+    is_cand_pure_romance = any(g in genres_c for g in ['romance', 'family']) and not any(g in genres_c for g in ['horror', 'thriller'])
+    if is_target_horror and is_cand_pure_romance:
+        return False, "Incompatible: pure Horror cannot match pure Romance/Family"
+
+    return True, f"Compatible: shared genres {list(shared)}"
 
 # Standard English stop words for lightweight text processing without external NLTK dependencies
 STOP_WORDS = set([
@@ -145,12 +216,12 @@ def calculate_multi_feature_similarity(target_movie, candidate_movie, weights=No
     if dir_t and dir_c and dir_t not in ['unknown', 'not listed', ''] and dir_t == dir_c:
         director_score = 1.0
 
-    # 6. K-Means Cluster Affinity Bonus
-    cluster_bonus = 0.0
+    # 6. K-Means Cluster Affinity Bonus (Weight: 10%)
+    cluster_score = 0.0
     cluster_t = target_movie.get('cluster')
     cluster_c = candidate_movie.get('cluster')
     if cluster_t is not None and cluster_c is not None and cluster_t == cluster_c:
-        cluster_bonus = 0.05
+        cluster_score = 1.0
 
     # Combined Multi-Feature Similarity Score
     total_score = (
@@ -159,7 +230,7 @@ def calculate_multi_feature_similarity(target_movie, candidate_movie, weights=No
         w['keywords'] * keywords_score +
         w['cast'] * cast_score +
         w['director'] * director_score +
-        cluster_bonus
+        w['cluster'] * cluster_score
     )
 
     # Calibrate realistic user-facing percentage (e.g. 68.0% to 98.5%)
@@ -441,6 +512,23 @@ class MovieRecommender:
                 'poster_url': None
             }
 
+        # 1f. Verify and correct target movie metadata using Manual Overrides, Curated Registry & TMDB
+        mid = target_movie.get('id')
+        m_title = target_movie.get('title')
+        raw_genres = target_movie.get('genres') or target_movie.get('genres_str')
+        if metadata_service:
+            verified = metadata_service.verify_movie_metadata(mid, title=m_title, raw_genres=raw_genres)
+            target_movie['genres'] = verified['genres']
+            target_movie['genres_str'] = verified['genres_str']
+            target_movie['genre_ids'] = verified['genre_ids']
+            target_movie['metadata_source'] = verified['metadata_source']
+            target_movie['is_manual_override'] = verified['is_manual_override']
+            target_movie['mismatches_detected'] = verified['mismatches_detected']
+        else:
+            target_movie['metadata_source'] = 'Curated Cinema Engine'
+            target_movie['is_manual_override'] = False
+            target_movie['mismatches_detected'] = []
+
         # Predict cluster and TF-IDF features for target movie if model loaded
         target_tags = f"{target_movie.get('overview', '')} {target_movie.get('genres_str', '')} {target_movie.get('keywords_str', '')} {target_movie.get('cast_str', '')} {target_movie.get('director', '')}"
         if self.tfidf is not None and self.kmeans is not None:
@@ -499,6 +587,13 @@ class MovieRecommender:
             seen_ids.add(int(cid))
             seen_titles.add(c_title)
 
+            # Ensure verified metadata for candidate
+            if metadata_service:
+                c_ver = metadata_service.verify_movie_metadata(cid, title=c.get('title'), raw_genres=c.get('genres') or c.get('genres_str'))
+                c['genres'] = c_ver['genres']
+                c['genres_str'] = c_ver['genres_str']
+                c['genre_ids'] = c_ver['genre_ids']
+
             # Ensure proper language code and display name
             lang_code = c.get('language_code') or c.get('original_language', 'en')
             c['language_code'] = lang_code
@@ -516,9 +611,18 @@ class MovieRecommender:
 
             unique_candidates.append(c)
 
-        # 4. Score every candidate using the Multi-Feature Similarity Algorithm (Genre 30%, Storyline 30%, Keywords 20%, Cast 10%, Director 10%)
-        scored_candidates = []
+        # 4. Apply Strict Genre Compatibility Filter
+        compatible_candidates = []
         for c in unique_candidates:
+            is_compat, reason = is_genre_compatible(target_movie, c)
+            if is_compat:
+                compatible_candidates.append(c)
+
+        candidate_pool = compatible_candidates if compatible_candidates else unique_candidates
+
+        # 5. Score every compatible candidate using Multi-Feature Similarity Algorithm (Genre 30%, Storyline 30%, Keywords 20%, Cast 5%, Director 5%, Cluster 10%)
+        scored_candidates = []
+        for c in candidate_pool:
             sim_metrics = calculate_multi_feature_similarity(
                 target_movie, 
                 c, 

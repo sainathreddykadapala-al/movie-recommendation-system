@@ -172,7 +172,7 @@
                         
                         <button type="button" class="btn btn-outline-cyan btn-sm rounded-pill w-100 btn-movie-similar" 
                                 data-movie-id="{{ movie.id }}" 
-                                data-movie-title="{{ movie.title }}">
+                                data-movie-title="{{ movie.title|e }}">
                             <i class="fa-solid fa-wand-magic-sparkles me-1"></i> Similar
                         </button>
                     </div>

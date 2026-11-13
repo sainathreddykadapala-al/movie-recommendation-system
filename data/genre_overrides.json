@@ -1,0 +1,53 @@
+{
+  "982532": {
+    "movie_id": 982532,
+    "title": "Sita Ramam",
+    "genres": [
+      "Romance",
+      "Drama",
+      "War"
+    ],
+    "genres_str": "Romance, Drama, War",
+    "genre_ids": [
+      10749,
+      18,
+      10752
+    ],
+    "notes": "Verified complete genres: Romance, Drama, War (TMDB API returns empty genres list for ID 982532)",
+    "source": "manual_override"
+  },
+  "690942": {
+    "movie_id": 690942,
+    "title": "Pushpa: The Rise",
+    "genres": [
+      "Action",
+      "Crime",
+      "Drama"
+    ],
+    "genres_str": "Action, Crime, Drama",
+    "genre_ids": [
+      28,
+      80,
+      18
+    ],
+    "notes": "Verified complete genres: Action, Crime, Drama (TMDB API only lists Drama)",
+    "source": "manual_override"
+  },
+  "554230": {
+    "movie_id": 554230,
+    "title": "K.G.F: Chapter 1",
+    "genres": [
+      "Action",
+      "Crime",
+      "Drama"
+    ],
+    "genres_str": "Action, Crime, Drama",
+    "genre_ids": [
+      28,
+      80,
+      18
+    ],
+    "notes": "Verified complete genres: Action, Crime, Drama (TMDB API only lists Drama)",
+    "source": "manual_override"
+  }
+}

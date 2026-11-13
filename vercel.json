@@ -1,4 +1,10 @@
 {
+  "version": 2,
+  "functions": {
+    "api/index.py": {
+      "includeFiles": "templates/**,static/**,data/**,models/**,database/**,services/**,ml/**,routes/**,config.py,app.py,genre_overrides.json,data/genre_overrides.json"
+    }
+  },
   "rewrites": [
     {
       "source": "/(.*)",
