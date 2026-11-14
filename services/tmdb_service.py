@@ -180,9 +180,8 @@ class TMDBService:
                 return None
         except Exception as e:
             err_str = str(e)
-            # Trip circuit breaker on any network reset, timeout or host unreachable
-            if any(k in err_str for k in ["WinError", "10054", "10013", "10061", "Failed to establish", "Max retries", "timeout", "timed out", "ConnectionResetError", "RemoteDisconnected"]):
-                self._network_offline_until = time.time() + 60
+            # Trip circuit breaker on any network reset, timeout, DNS failure or host unreachable
+            self._network_offline_until = time.time() + 30
             return None
 
     def format_movie(self, item):
@@ -705,7 +704,7 @@ class TMDBService:
 
         return candidates
 
-    def enrich_movie(self, movie_dict):
+    def enrich_movie(self, movie_dict, fetch_remote=False):
         """Enriches a movie dict with live TMDB poster, backdrop, language and details."""
         if not movie_dict or not isinstance(movie_dict, dict):
             return movie_dict
@@ -725,17 +724,40 @@ class TMDBService:
             movie_dict['language_name'] = LANGUAGE_MAP.get(movie_dict['language_code'], str(lang_code).title())
             movie_dict['original_language'] = movie_dict['language_name']
 
-        # If already has full poster_url, return
-        if movie_dict.get('poster_url'):
+        # 1. Match from World Cinema Registry (instant verified posters with 0ms network latency)
+        try:
+            from ml.world_cinema import WORLD_CINEMA_REGISTRY
+            for w in WORLD_CINEMA_REGISTRY:
+                if str(w.get('id')) == str(movie_id) or str(w.get('title', '')).strip().lower() == str(movie_dict.get('title', '')).strip().lower():
+                    if w.get('poster_url'):
+                        movie_dict['poster_url'] = w['poster_url']
+                        movie_dict['poster_path'] = w.get('poster_path')
+                        if w.get('backdrop_url'):
+                            movie_dict['backdrop_url'] = w['backdrop_url']
+                            movie_dict['backdrop_path'] = w.get('backdrop_path')
+                        return movie_dict
+        except Exception:
+            pass
+
+        # 2. If already has a valid full poster_url or poster_path, format and return
+        if movie_dict.get('poster_url') and str(movie_dict.get('poster_url')).startswith('http'):
+            return movie_dict
+        if movie_dict.get('poster_path'):
+            movie_dict['poster_url'] = f"{self.poster_base}{movie_dict['poster_path']}"
             return movie_dict
 
+        # 3. If remote fetching is not requested, return immediately to maintain sub-millisecond response times
+        if not fetch_remote:
+            return movie_dict
+
+        # 4. Live TMDB API lookup by ID
         details = self._make_request(f"/movie/{movie_id}")
-        if details:
+        if details and details.get('poster_path'):
             poster_path = details.get('poster_path')
             backdrop_path = details.get('backdrop_path')
             movie_dict['poster_path'] = poster_path
             movie_dict['backdrop_path'] = backdrop_path
-            movie_dict['poster_url'] = f"{self.poster_base}{poster_path}" if poster_path else None
+            movie_dict['poster_url'] = f"{self.poster_base}{poster_path}"
             movie_dict['backdrop_url'] = f"{self.backdrop_base}{backdrop_path}" if backdrop_path else None
             if not movie_dict.get('overview') or movie_dict['overview'] == 'No plot summary available.':
                 movie_dict['overview'] = details.get('overview', '')
@@ -743,6 +765,20 @@ class TMDBService:
                 movie_dict['language_code'] = details['original_language']
                 movie_dict['language_name'] = LANGUAGE_MAP[details['original_language']]
                 movie_dict['original_language'] = movie_dict['language_name']
+            return movie_dict
+
+        # 5. Search TMDB by movie title fallback
+        title = movie_dict.get('title')
+        if title:
+            search_res = self.search(title, page=1)
+            if search_res and search_res[0].get('poster_url'):
+                best_hit = search_res[0]
+                movie_dict['poster_url'] = best_hit['poster_url']
+                movie_dict['poster_path'] = best_hit.get('poster_path')
+                if best_hit.get('backdrop_url'):
+                    movie_dict['backdrop_url'] = best_hit['backdrop_url']
+                    movie_dict['backdrop_path'] = best_hit.get('backdrop_path')
+                return movie_dict
         return movie_dict
 
 # Singleton instance

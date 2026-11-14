@@ -236,17 +236,22 @@ def api_movie_similar(movie_id=None):
         )
 
         if result.get('success') and result.get('recommendations'):
-            selected_movie = tmdb_service.enrich_movie(result['selected_movie'])
+            selected_movie = tmdb_service.enrich_movie(result['selected_movie'], fetch_remote=True)
             # Preserve verified metadata provenance in returned payload
             selected_movie['metadata_source'] = result['selected_movie'].get('metadata_source', 'Verified')
             selected_movie['is_manual_override'] = result['selected_movie'].get('is_manual_override', False)
             selected_movie['mismatches_detected'] = result['selected_movie'].get('mismatches_detected', [])
 
-            enriched_recs = []
-            for rec in result['recommendations']:
-                enriched = tmdb_service.enrich_movie(rec)
+            # Enrich candidate recommendations (top 35) so modal cards have verified posters and details
+            raw_all_recs = (result.get('all_recommendations') or result.get('recommendations', []))[:35]
+            enriched_all_recs = []
+            for rec in raw_all_recs:
+                enriched = tmdb_service.enrich_movie(dict(rec), fetch_remote=False)
                 enriched['is_in_watchlist'] = (enriched.get('id') in watchlist_ids)
-                enriched_recs.append(enriched)
+                enriched_all_recs.append(enriched)
+
+            target_count = min(len(enriched_all_recs), len(result.get('recommendations', [])) or 30)
+            enriched_recs = enriched_all_recs[:target_count]
 
             # Record in user history if authenticated
             if user:
@@ -270,7 +275,7 @@ def api_movie_similar(movie_id=None):
                 'selected_movie': selected_movie,
                 'movie': selected_movie,
                 'recommendations': enriched_recs,
-                'all_recommendations': result.get('all_recommendations', enriched_recs),
+                'all_recommendations': enriched_all_recs,
                 'available_languages': result.get('available_languages', []),
                 'available_genres': result.get('available_genres', []),
                 'count': len(enriched_recs),

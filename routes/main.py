@@ -163,8 +163,9 @@ def api_movie_details_full(movie_id):
         recommender = MovieRecommender.get_instance()
         local_movie = recommender.get_movie_by_id(movie_id)
         if local_movie:
-            enriched = tmdb_service.enrich_movie(local_movie)
-            return jsonify({'success': True, 'movie': enriched})
+            enriched = tmdb_service.enrich_movie(local_movie, fetch_remote=True)
+            from services.json_sanitizer import sanitize_movie_dict
+            return jsonify({'success': True, 'movie': sanitize_movie_dict(enriched)})
         return jsonify({'success': False, 'error': 'Movie not found'}), 404
     return jsonify({'success': True, 'movie': details})
 

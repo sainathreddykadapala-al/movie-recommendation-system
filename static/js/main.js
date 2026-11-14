@@ -846,7 +846,46 @@ function applyModalFiltersAndRender() {
             </div>
         `;
         gridContainer.appendChild(cardCol);
+
+        // Dynamic background resolution if poster was not bundled
+        if (!hasPoster && rec.id) {
+            resolveMoviePosterAsync(cardCol, rec.id, rec.title);
+        }
     });
+}
+
+function resolveMoviePosterAsync(containerEl, movieId, movieTitle) {
+    if (!containerEl || !movieId) return;
+    fetch(`/api/movie-details/${movieId}`)
+        .then(res => res.json())
+        .then(data => {
+            const m = data && data.movie ? data.movie : null;
+            if (m && (m.poster_url || m.poster_path)) {
+                const posterUrl = m.poster_url || ('https://image.tmdb.org/t/p/w500' + m.poster_path);
+                const frame = containerEl.querySelector('.poster-frame');
+                const fallback = containerEl.querySelector('.poster-svg-fallback');
+                let img = containerEl.querySelector('.poster-img');
+                if (img) {
+                    img.src = posterUrl;
+                    img.style.display = 'block';
+                    if (fallback) fallback.classList.add('d-none');
+                } else if (frame) {
+                    const newImg = document.createElement('img');
+                    newImg.src = posterUrl;
+                    newImg.alt = movieTitle || 'Poster';
+                    newImg.className = 'poster-img';
+                    newImg.loading = 'lazy';
+                    newImg.onerror = function() {
+                        this.style.display = 'none';
+                        if (fallback) fallback.classList.remove('d-none');
+                    };
+                    frame.insertBefore(newImg, fallback);
+                    if (fallback) fallback.classList.add('d-none');
+                }
+            }
+        })
+        .catch(() => {});
+}
 }
 
 function escapeHtml(text) {

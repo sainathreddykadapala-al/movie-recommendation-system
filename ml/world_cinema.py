@@ -37,7 +37,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['revolution', 'british empire', 'friendship', 'warrior', 'patriotism', 'epic battle', 'brotherhood', 'freedom fighter'],
         'keywords_str': 'revolution, british empire, friendship, warrior, patriotism, epic battle, brotherhood',
         'overview': 'A fictional tale of two legendary revolutionaries and their journey away from home before they began fighting for their country in the 1920s.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/wE0q27QI6TM2c1B4u739xG2kMmQ.jpg',
+        'poster_path': '/wE0I6efAW4cDDmZQWtwZMOW44EJ.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/wE0I6efAW4cDDmZQWtwZMOW44EJ.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/7c9UVPPiTPltouxSh26AQN232u.jpg'
     },
     {
@@ -63,7 +64,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['ancient kingdom', 'warrior prince', 'royal conspiracy', 'sword fight', 'waterfall', 'dynasty', 'epic battle'],
         'keywords_str': 'ancient kingdom, warrior prince, royal conspiracy, sword fight, waterfall, dynasty',
         'overview': 'In the kingdom of Mahishmati, Shivudu falls in love with a young warrior woman. While trying to win her over, he learns about his true heritage and his royal destiny.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/9BAjt85amQXzhv0JvXN2dD3r22n.jpg',
+        'poster_path': '/9BAjt8nSSms62uOVYn1t3C3dVto.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/9BAjt8nSSms62uOVYn1t3C3dVto.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/j1r1c20g64C93Xv8BshX2oP8oZk.jpg'
     },
     {
@@ -89,7 +91,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['betrayal', 'revenge', 'throne', 'warrior', 'royal betrayal', 'sword fight', 'epic triumph'],
         'keywords_str': 'betrayal, revenge, throne, warrior, royal betrayal, sword fight',
         'overview': 'When Shiva learns his heritage, he begins searching for answers. His story is juxtaposed with past events that unfolded in the Mahishmati Kingdom.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/21sC2assImQIYCWW8W7YyqjHh6a.jpg',
+        'poster_path': '/21sC2assImQIYCEDA84Qh9d1RsK.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/21sC2assImQIYCEDA84Qh9d1RsK.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/4kLq7i1oOQkL776tG70jK047n9c.jpg'
     },
     {
@@ -115,7 +118,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['red sandalwood', 'smuggling syndicate', 'underdog rise', 'forest', 'police standoff', 'gang warfare'],
         'keywords_str': 'red sandalwood, smuggling syndicate, underdog rise, forest, police standoff',
         'overview': 'Pushpa Raj, a coolie, rises through the ranks of a red sandalwood smuggling syndicate while battling ruthless police inspector Bhanwar Singh Shekhawat.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/r1yAZVNnn9BRv83q89cj4n239b6.jpg',
+        'poster_path': '/h6Pd89ngvl9quPVsx3KoJlQsvk9.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/h6Pd89ngvl9quPVsx3KoJlQsvk9.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/9y0T6j83709b1k821h83h0h28.jpg'
     },
     {
@@ -141,7 +145,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['surgeon', 'anger management', 'heartbreak', 'alcoholism', 'medical college', 'passionate love', 'redemption'],
         'keywords_str': 'surgeon, anger management, heartbreak, alcoholism, medical college, passionate love',
         'overview': 'Arjun Reddy, a high-functioning alcoholic surgeon with serious anger management issues, spirals into self-destruction after the love of his life is forced to marry someone else.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/sT9n5N8f9X44h6o81j8k8Kj81j8.jpg',
+        'poster_path': '/qheJcFjQ3hAMroE8y6FpCg6jNeN.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/qheJcFjQ3hAMroE8y6FpCg6jNeN.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/k839h29h83719h93h928h92.jpg'
     },
     {
@@ -167,7 +172,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['reincarnation', 'housefly', 'revenge', 'murder mystery', 'inventive combat', 'love beyond death'],
         'keywords_str': 'reincarnation, housefly, revenge, murder mystery, inventive combat',
         'overview': 'A murdered man is reincarnated as a housefly and seeks to protect his lover while taking relentless revenge against his wealthy murderer.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/h2m8h92837h9283h829h8.jpg',
+        'poster_path': '/57o1DBc5DfJXVc8wArAblSbZ8sD.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/57o1DBc5DfJXVc8wArAblSbZ8sD.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/938h29h829h8293h829.jpg'
     },
     {
@@ -193,7 +199,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['village politics', 'hearing impaired hero', 'corrupt landlord', 'brother revenge', '1980s rural'],
         'keywords_str': 'village politics, hearing impaired hero, corrupt landlord, brother revenge',
         'overview': 'In a 1980s village ruled by a tyrannical president, a partially deaf youth seeks vengeance when his upright brother is murdered for daring to run in the local elections.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/x2938h293h829h3892h8.jpg',
+        'poster_path': '/dwXmOYJVM1VIkkSXHY5zYSaLJLC.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/dwXmOYJVM1VIkkSXHY5zYSaLJLC.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/3892h8392h8392h839.jpg'
     },
     {
@@ -219,7 +226,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['cricket', 'father and son', 'comeback', 'heart failure', 'sacrifice', 'never give up'],
         'keywords_str': 'cricket, father and son, comeback, heart failure, sacrifice',
         'overview': 'A talented but failed cricketer decides to return to cricket in his late thirties driven by the desire to represent the Indian cricket team and fulfill his sons wish for an Indian jersey.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/y92837h928h3982h938.jpg',
+        'poster_path': '/bU9q9yVtxeBiC0Do27CekHXNE6D.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/bU9q9yVtxeBiC0Do27CekHXNE6D.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/8239h8293h8293h8.jpg'
     },
     {
@@ -245,7 +253,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['dystopia', 'mahabharata', 'reincarnation', 'futuristic city', 'bounty hunter', 'vishnu avatar'],
         'keywords_str': 'dystopia, mahabharata, reincarnation, futuristic city, bounty hunter',
         'overview': 'In a post-apocalyptic world in the year 2898 AD, a modern-day avatar of Vishnu descends to Earth to protect the world from evil forces.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/f837492h837492h83.jpg',
+        'poster_path': '/3ZNvOWYrnqz27TfS0USHNwlPp99.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/3ZNvOWYrnqz27TfS0USHNwlPp99.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/83749283749283749.jpg'
     },
     {
@@ -271,7 +280,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['kashmir border', 'military officer', 'love letters', 'patriotism', 'poignant romance'],
         'keywords_str': 'kashmir border, military officer, love letters, patriotism, poignant romance',
         'overview': 'An orphaned soldier lieutenant Ram stationed in Kashmir receives secret love letters from a girl named Sita Mahalakshmi. He sets out to find her and uncover her true identity.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/s92837h928h398.jpg',
+        'poster_path': '/yiqX0x1WSrhQy6uCO7mCw6mHahx.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/yiqX0x1WSrhQy6uCO7mCw6mHahx.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/m928374928374.jpg'
     },
 
@@ -301,7 +311,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['wrestling', 'female empowerment', 'father daughter', 'commonwealth games', 'sports biopic', 'gold medal'],
         'keywords_str': 'wrestling, female empowerment, father daughter, commonwealth games, sports biopic',
         'overview': 'Former wrestler Mahavir Singh Phogat trains his daughters Geeta and Babita to become world-class wrestlers, overcoming societal prejudices to win international gold.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/y9xO2837h928h38.jpg',
+        'poster_path': '/cJRPOLEexI7qp2DKtFfCh7YaaUG.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/cJRPOLEexI7qp2DKtFfCh7YaaUG.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/d837492837492.jpg'
     },
     {
@@ -327,7 +338,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['engineering college', 'friendship', 'education system pressure', 'inventor', 'pursue excellence', 'humor and heart'],
         'keywords_str': 'engineering college, friendship, education system pressure, inventor, pursue excellence',
         'overview': 'Two friends search for their long lost companion Rancho while revisiting college memories and recalling the friend who inspired them to think differently.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/3928h3982h3982h.jpg',
+        'poster_path': '/66A9MqXOyVFCssoloscw79z8Tew.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/66A9MqXOyVFCssoloscw79z8Tew.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/3892749283749.jpg'
     },
     {
@@ -353,7 +365,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['british raj', 'cricket match', 'tax revolt', 'underdog victory', 'village community', 'patriotism'],
         'keywords_str': 'british raj, cricket match, tax revolt, underdog victory, village community',
         'overview': 'The people of a small village in Victorian India stake their future on a game of cricket against their ruthless British rulers to avoid paying high agricultural taxes.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/l928374928374.jpg',
+        'poster_path': '/or1gBugydmjToAEq7OZY0owwFk.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/or1gBugydmjToAEq7OZY0owwFk.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/8273947293847.jpg'
     },
     {
@@ -379,7 +392,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['blind pianist', 'murder witness', 'dark comedy', 'blackmail', 'twists and turns', 'organ harvesting'],
         'keywords_str': 'blind pianist, murder witness, dark comedy, blackmail, twists and turns',
         'overview': 'A series of mysterious events changes the life of a blind pianist who must now report a crime that he should not have been able to witness.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/a928374928374.jpg',
+        'poster_path': '/dy3K6hNvwE05siGgiLJcEiwgpdO.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/dy3K6hNvwE05siGgiLJcEiwgpdO.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
     {
@@ -405,7 +419,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['greed', 'mythological demon', 'hastar', 'ancient treasure', 'rain', 'generational curse'],
         'keywords_str': 'greed, mythological demon, hastar, ancient treasure, rain, generational curse',
         'overview': 'A mythological story about a human who builds a shrine for Hastar, a monster who is never supposed to be worshipped, unleashing horrifying consequences fueled by greed.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/t928374928374.jpg',
+        'poster_path': '/8ee6TGCeGjU8KeyTG8vdF7wXrGA.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/8ee6TGCeGjU8KeyTG8vdF7wXrGA.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/82739482739.jpg'
     },
     {
@@ -431,7 +446,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['coal mafia', 'gang war', 'blood feud', 'revenge', 'three generations', 'crime epic'],
         'keywords_str': 'coal mafia, gang war, blood feud, revenge, three generations, crime epic',
         'overview': 'A clash between Sultan and Shahid Khan leads to the expulsion of Khan from Wasseypur, igniting a deadly blood feud that spans three generations of coal mafia wars.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/g928374928374.jpg',
+        'poster_path': '/oVeE2QTUb14jPU2lYEGPE3s8T9j.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/oVeE2QTUb14jPU2lYEGPE3s8T9j.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/928374928374.jpg'
     },
     {
@@ -457,7 +473,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['alien visitor', 'religion satire', 'lost transmitter', 'innocence', 'godmen corruption'],
         'keywords_str': 'alien visitor, religion satire, lost transmitter, innocence, godmen corruption',
         'overview': 'An alien on Earth loses the remote to his spaceship and embarks on a quest to recover it, asking innocent questions about religious dogmas and hypocrisies.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/p928374928374.jpg',
+        'poster_path': '/z2x2Y4tncefsIU7h82gmUM5vnBJ.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/z2x2Y4tncefsIU7h82gmUM5vnBJ.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/82739482734.jpg'
     },
 
@@ -487,7 +504,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['gold mines', 'underworld gangster', 'mumbai mafia', 'slaves', 'liberator', 'mother promise', 'swagger'],
         'keywords_str': 'gold mines, underworld gangster, mumbai mafia, slaves, liberator, mother promise',
         'overview': 'Rocky, a fierce young mercenary from Bombay, arrives at the Kolar Gold Fields disguised as a slave to assassinate the ruthless tyrant Garuda and fulfill his mother promise.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/k928374928374.jpg',
+        'poster_path': '/t1oLNRFixpFOVsyz1HCqCUW3wiW.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/t1oLNRFixpFOVsyz1HCqCUW3wiW.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827349.jpg'
     },
     {
@@ -513,7 +531,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['gold empire', 'adheera', 'prime minister clash', 'heavy gunfire', 'monopoly', 'legendary climax'],
         'keywords_str': 'gold empire, adheera, prime minister clash, heavy gunfire, monopoly',
         'overview': 'The blood-soaked land of Kolar Gold Fields has a new overlord in Rocky, whose name strikes fear into his foes while the government sees him as an existential threat.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/k82739482734.jpg',
+        'poster_path': '/yUtaHkL2SDIAZhRApZAyQrAXygn.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/yUtaHkL2SDIAZhRApZAyQrAXygn.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/928374928374.jpg'
     },
     {
@@ -539,7 +558,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['bhoota kola', 'demigod', 'forest rights', 'tribal ritual', 'divine possession', 'folklore'],
         'keywords_str': 'bhoota kola, demigod, forest rights, tribal ritual, divine possession, folklore',
         'overview': 'When greed paves the way for betrayal and deceit, a young tribal champion invokes the wrath of indigenous guardian deities to protect his people land and ancestral forest.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/ka928374928374.jpg',
+        'poster_path': '/txVfrmwFOKB5qczM0ENYSqKMnSv.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/txVfrmwFOKB5qczM0ENYSqKMnSv.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
     {
@@ -565,7 +585,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['dog love', 'labrador', 'himalayas road trip', 'lonely man redemption', 'tearjerker', 'unconditional bond'],
         'keywords_str': 'dog love, labrador, himalayas road trip, lonely man redemption, unconditional bond',
         'overview': 'Dharma is stuck in a rut with his negative and lonely lifestyle, until an energetic and affectionate Labrador pup named Charlie walks into his life and transforms it forever.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/c928374928374.jpg',
+        'poster_path': '/3oFfY1HpzJDlRzKSCBF2sA5mb9U.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/3oFfY1HpzJDlRzKSCBF2sA5mb9U.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
 
@@ -595,7 +616,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['lcu universe', 'black squad', 'drug syndicate', 'rolex', 'gatling gun', 'vigilante justice', 'undercover cop'],
         'keywords_str': 'lcu universe, black squad, drug syndicate, rolex, gatling gun, vigilante justice',
         'overview': 'A high-level special agent investigates a series of murders committed by masked vigilantes, leading to an all-out war with a merciless drug cartel.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/v928374928374.jpg',
+        'poster_path': '/x86xaUnxU31JYiwlO35corDEV1i.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/x86xaUnxU31JYiwlO35corDEV1i.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
     {
@@ -621,7 +643,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['one night thriller', 'convict father', 'police station siege', 'biryani', 'daughter reunion', 'lorry chase'],
         'keywords_str': 'one night thriller, convict father, police station siege, daughter reunion, lorry chase',
         'overview': 'A recently released prisoner drives a truck full of unconscious poisoned police officers through the night to a hospital while armed gangsters try to intercept him.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/k928374928374.jpg',
+        'poster_path': '/h8Rb9gBr48ODIwYUttZNYeMWeUU.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/h8Rb9gBr48ODIwYUttZNYeMWeUU.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
     {
@@ -647,7 +670,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['courtroom battle', 'police brutality', 'habeas corpus', 'tribal rights', 'human rights lawyer', 'justice'],
         'keywords_str': 'courtroom battle, police brutality, habeas corpus, tribal rights, human rights lawyer',
         'overview': 'When a tribal man is arrested for alleged theft and goes missing from police custody, his pregnant wife seeks the help of an uncompromising human rights lawyer.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/j928374928374.jpg',
+        'poster_path': '/xfwHIY865AYJoFgBAYoAJLvPLO9.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/xfwHIY865AYJoFgBAYoAJLvPLO9.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
     {
@@ -673,7 +697,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['caste oppression', 'land dispute', 'father protection', 'hidden warrior', 'blood sacrifice', 'rural tamil nadu'],
         'keywords_str': 'caste oppression, land dispute, father protection, hidden warrior, blood sacrifice',
         'overview': 'A peaceful farmer who hides a violent past must unleash his inner warrior to save his teenage son from a ruthless upper-caste landlord thirsting for revenge.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/a928374928374.jpg',
+        'poster_path': '/Elnp3XrAlMM30dil8rbL7D9XeP.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/Elnp3XrAlMM30dil8rbL7D9XeP.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
 
@@ -703,7 +728,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['alibi mastermind', 'accidental murder', 'protecting family', 'police interrogation', 'cinema knowledge', 'cable tv'],
         'keywords_str': 'alibi mastermind, accidental murder, protecting family, police interrogation, cinema knowledge',
         'overview': 'A common man goes to extraordinary lengths to protect his family from the law after they commit an accidental murder to defend their dignity.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/d928374928374.jpg',
+        'poster_path': '/67FsF2kpgEZ1T5Qos4adgqm9dLf.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/67FsF2kpgEZ1T5Qos4adgqm9dLf.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
     {
@@ -729,7 +755,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['guna caves', 'devils kitchen', 'survival rescue', 'unconditional friendship', 'kodaikanal', 'true story'],
         'keywords_str': 'guna caves, devils kitchen, survival rescue, unconditional friendship, kodaikanal',
         'overview': 'A group of friends from a small town in Kochi embark on a vacation to Kodaikanal, where one of them falls into the notorious deep Guna Cave, sparking an unprecedented rescue mission.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/m928374928374.jpg',
+        'poster_path': '/4SnM2lgrQ4N2oG0JjxKoWb0ClcG.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/4SnM2lgrQ4N2oG0JjxKoWb0ClcG.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
     {
@@ -755,7 +782,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['dysfunctional brothers', 'shammi toxic masculinity', 'fishing backwaters', 'family warmth', 'modern kerala'],
         'keywords_str': 'dysfunctional brothers, shammi toxic masculinity, fishing backwaters, family warmth',
         'overview': 'Four dysfunctional brothers living together in a dilapidated home in the backwaters of Kumbalangi find love, redemption, and healing as they face a bizarre neighborhood adversary.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/k928374928374.jpg',
+        'poster_path': '/lJ3RvIirE2C7gdBKvPRaoQ3iCo2.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/lJ3RvIirE2C7gdBKvPRaoQ3iCo2.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
 
@@ -785,6 +813,7 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['class inequality', 'subterranean house', 'deception', 'rich vs poor', 'smell of poverty', 'bunker secret', 'dark satire'],
         'keywords_str': 'class inequality, subterranean house, deception, rich vs poor, smell of poverty, bunker secret',
         'overview': 'All unemployed, Ki-taek and his family take peculiar interest in the wealthy and glamorous Parks, as they ingratiate themselves into their lives and get entangled in an unexpected incident.',
+        'poster_path': '/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg',
         'poster_url': 'https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/hiKmpnnL96zgQ5pk87L83zyKyRJ.jpg'
     },
@@ -811,7 +840,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['zombie outbreak', 'bullet train', 'father daughter sacrifice', 'speed survival', 'human selfishness'],
         'keywords_str': 'zombie outbreak, bullet train, father daughter sacrifice, speed survival',
         'overview': 'While a zombie virus breaks out in South Korea, passengers struggle to survive on the high-speed train from Seoul to Busan.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/vVpEOvdxVBP2aV166j5Xlvb5C2f.jpg',
+        'poster_path': '/vNVFt6dtcqnI7hqa6LFBUibuFiw.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/vNVFt6dtcqnI7hqa6LFBUibuFiw.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/3P52oz9HPCSWzJSpzq5w1j7y5f.jpg'
     },
     {
@@ -837,7 +867,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['hallway hammer fight', 'fifteen years captive', 'twisted revenge', 'hypnosis', 'forbidden truth', 'neo-noir'],
         'keywords_str': 'hallway hammer fight, fifteen years captive, twisted revenge, hypnosis, forbidden truth',
         'overview': 'After being mysteriously kidnapped and imprisoned for fifteen years, Oh Dae-su is released and given five days to find his captor and uncover the horrifying motive.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/pWDtjs568ZDYvPxRPVIvXfo770ad.jpg',
+        'poster_path': '/pWDtjs568ZfOTMbURQBYuT4Qxka.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/pWDtjs568ZfOTMbURQBYuT4Qxka.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/7k0b9w4i98Z4k8877f98.jpg'
     },
     {
@@ -863,7 +894,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['serial killer', 'rural province', 'obsessed detectives', 'true events', 'unsolved cold case', 'rainy days'],
         'keywords_str': 'serial killer, rural province, obsessed detectives, true events, unsolved cold case',
         'overview': 'In 1986, in a small Korean province, two detectives struggle with the case of multiple young women found raped and murdered by an unknown culprit.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/k82739482734.jpg',
+        'poster_path': '/jcgUjx1QcupGzjntTVlnQ15lHqy.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/jcgUjx1QcupGzjntTVlnQ15lHqy.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/928374928374.jpg'
     },
 
@@ -893,7 +925,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['studio ghibli', 'spirit bathhouse', 'parents turned pigs', 'no face', 'magical adventure', 'haku dragon'],
         'keywords_str': 'studio ghibli, spirit bathhouse, parents turned pigs, no face, magical adventure',
         'overview': 'A young girl, Chihiro, becomes trapped in a strange new world of spirits. When her parents undergo a mysterious transformation, she must call upon the courage she never knew she had to free them.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/393792h3892h83.jpg',
+        'poster_path': '/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/39wmItIWsg5sZMyRUHLkWBcuVCM.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/839274928374.jpg'
     },
     {
@@ -919,7 +952,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['body swapping', 'comet strike', 'timelines', 'tokyo and rural village', 'red string of fate', 'destiny'],
         'keywords_str': 'body swapping, comet strike, timelines, tokyo and rural village, red string of fate',
         'overview': 'High schoolers Mitsuha and Taki are complete strangers living separate lives until they suddenly begin swapping bodies across time and space.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/q719jXXEzOoYaps6q2P6eGHstIT.jpg',
+        'poster_path': '/vfJFJPepRKapMd5G2ro7klIRysq.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/vfJFJPepRKapMd5G2ro7klIRysq.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/789274928374.jpg'
     },
     {
@@ -945,7 +979,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['ronin', 'village defense', 'bandit raid', 'honor', 'masterpiece', 'tactical warfare'],
         'keywords_str': 'ronin, village defense, bandit raid, honor, masterpiece, tactical warfare',
         'overview': 'A poor village under attack by bandits recruits seven unemployed samurai to help them defend themselves and teach them farming and combat tactics.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/8729384729384.jpg',
+        'poster_path': '/lOMGc8bnSwQhS4XyE1S99uH8NXf.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/lOMGc8bnSwQhS4XyE1S99uH8NXf.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827349.jpg'
     },
 
@@ -975,7 +1010,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['dream within dream', 'subconscious mind', 'heist extraction', 'spinning totem', 'limbo', 'memory architect', 'time dilation'],
         'keywords_str': 'dream within dream, subconscious mind, heist extraction, spinning totem, limbo, memory architect',
         'overview': 'Cobb, a skilled thief who steals corporate secrets through dream-sharing technology, is offered a chance to erase his criminal history as payment for performing inception.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg',
+        'poster_path': '/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/xlaY2zyzMfkhk0HSC5VUwzoZPU1.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/8ZTVqvKDQ8emSGUEMjsS4yHAwrp.jpg'
     },
     {
@@ -1001,7 +1037,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['black hole gargantua', 'wormhole exploration', 'time relativity', 'five dimensional tesseract', 'earth blight', 'love transcends dimensions'],
         'keywords_str': 'black hole gargantua, wormhole exploration, time relativity, five dimensional tesseract, earth blight',
         'overview': 'The adventures of a group of explorers who make use of a newly discovered wormhole to surpass the limitations on human space travel and conquer the vast distances involved in an interstellar voyage.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg',
+        'poster_path': '/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/yQvGrMoipbRoddT0ZR8tPoR7NfX.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/xJHokMbljvjADYdit5fK5VQsXEG.jpg'
     },
     {
@@ -1027,6 +1064,7 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['joker chaos', 'gotham city', 'vigilante hero', 'harvey dent two-face', 'moral dilemma', 'corruption'],
         'keywords_str': 'joker chaos, gotham city, vigilante hero, harvey dent two-face, moral dilemma',
         'overview': 'Batman raises the stakes in his war on crime. With the help of Lt. Jim Gordon and District Attorney Harvey Dent, Batman sets out to dismantle the remaining criminal organizations that plague the streets.',
+        'poster_path': '/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
         'poster_url': 'https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/dqK9Hag1054tghRQSqLSfrkvQnA.jpg'
     },
@@ -1053,7 +1091,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['simulated reality', 'red pill blue pill', 'bullet time', 'artificial intelligence', 'chosen one', 'cyberpunk'],
         'keywords_str': 'simulated reality, red pill blue pill, bullet time, artificial intelligence, chosen one',
         'overview': 'Set in the 22nd century, The Matrix tells the story of a computer hacker who joins a group of underground insurgents fighting the vast and powerful computers who now rule the earth.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/f89U3ADr1oiB1s9GkdPOEpXUk5H.jpg',
+        'poster_path': '/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/dXNAPwY7VrqMAo51EKhhCJfaGb5.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/7c9UVPPiTPltouxSh26AQN232u.jpg'
     },
     {
@@ -1079,7 +1118,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['roman empire', 'colosseum battles', 'general turned slave', 'revenge against emperor', 'honor', 'valhalla'],
         'keywords_str': 'roman empire, colosseum battles, general turned slave, revenge against emperor, honor',
         'overview': 'In the year 180, the death of emperor Marcus Aurelius throws the Roman Empire into turmoil. Maximus, one of the Roman army most capable generals, is stripped of his rank and forced into slavery.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/ty8TGRuvJLPUmAR1H1nRIsgwvim.jpg',
+        'poster_path': '/aDb548BOkFfI4nFm0kx8A3Ezh7H.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/aDb548BOkFfI4nFm0kx8A3Ezh7H.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/3G1Q5m46Q2s3h74h983.jpg'
     },
     {
@@ -1105,6 +1145,7 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['prison escape', 'wrongful conviction', 'hope', 'friendship', 'tunnel', 'redemption'],
         'keywords_str': 'prison escape, wrongful conviction, hope, friendship, tunnel, redemption',
         'overview': 'Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison.',
+        'poster_path': '/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg',
         'poster_url': 'https://image.tmdb.org/t/p/w500/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/kXfqcdQKsToO0OUXHcrrNCHDBzO.jpg'
     },
@@ -1131,6 +1172,7 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['mafia family', 'don corleone', 'succession', 'loyalty and betrayal', 'organized crime'],
         'keywords_str': 'mafia family, don corleone, succession, loyalty and betrayal, organized crime',
         'overview': 'Spanning the years 1945 to 1955, a chronicle of the fictional Italian-American Corleone crime family. When organized crime family patriarch Vito Corleone barely survives an attempt on his life, his youngest son Michael steps in.',
+        'poster_path': '/3bhkrj58Vtu7enYsRolD1fZdja1.jpg',
         'poster_url': 'https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/tmU7GeKVybMWFButWEGl2M4GeiP.jpg'
     },
@@ -1157,7 +1199,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['ramayana', 'lord rama', 'sita rescue', 'ravana', 'hanuman', 'lanka bridge', 'hindu mythology', 'epic battle'],
         'keywords_str': 'ramayana, lord rama, sita rescue, ravana, hanuman, lanka bridge, hindu mythology',
         'overview': 'An epic cinematic retelling of the ancient Indian epic poem Ramayana. Prince Rama of Ayodhya embarks on a legendary quest to rescue his wife Sita after she is abducted by Ravana, the demon king of Lanka.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/r928374928374.jpg',
+        'poster_path': '/hOuEgnB9jfVneEsulMcqEJE4kSL.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/hOuEgnB9jfVneEsulMcqEJE4kSL.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/827394827394.jpg'
     },
     {
@@ -1183,7 +1226,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['pandora moon', 'alien culture', 'navi resistance', 'bio-neural link', 'tree of souls', 'environmental protection'],
         'keywords_str': 'pandora moon, alien culture, navi resistance, bio-neural link, tree of souls',
         'overview': 'In the 22nd century, a paraplegic Marine is dispatched to the moon Pandora on a unique mission, but becomes torn between following orders and protecting an alien civilization.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/kyeqWdyUXW608qlYkRqosgbbnK3.jpg',
+        'poster_path': '/gKY6q7SjCkAU6FqvqWybDYgUKIF.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/gKY6q7SjCkAU6FqvqWybDYgUKIF.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/vL5LR6WdxWPjC3U4UuvD2q1o44k.jpg'
     },
     {
@@ -1209,7 +1253,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['red sandalwood', 'syndicate king', 'police faceoff', 'underworld war', 'rule'],
         'keywords_str': 'red sandalwood, syndicate king, police faceoff, underworld war, rule',
         'overview': 'Pushpa Raj expands his red sandalwood empire beyond borders while confronting high-ranking law enforcement and rival crime lords in an all-out war.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/b0Onv3X1R8Z43mZ3uK4O8tH9zRk.jpg',
+        'poster_path': '/cdqLnri3NEGcmfnqwk2TSIYtddg.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/cdqLnri3NEGcmfnqwk2TSIYtddg.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/r1yAZVNnn9BRv83q89cj4n239b6.jpg'
     },
     {
@@ -1235,7 +1280,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['coastal warrior', 'sea smuggling', 'brotherhood', 'courage', 'fearless protector'],
         'keywords_str': 'coastal warrior, sea smuggling, brotherhood, courage, fearless protector',
         'overview': 'A courageous coastal warrior stands up against treacherous forces threatening his people and his lands in an epic coastal saga.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/A7O2n8Q6yP9x7Z2v8t0w3u4v5.jpg',
+        'poster_path': '/lbOyeiiRYAE6Nm2e7xiNAAaRwZB.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/lbOyeiiRYAE6Nm2e7xiNAAaRwZB.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/9y0T6j83709b1k821h83h0h28.jpg'
     },
     {
@@ -1261,7 +1307,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['superhero', 'hanuman powers', 'village protector', 'mythological superhero', 'divine power'],
         'keywords_str': 'superhero, hanuman powers, village protector, mythological superhero',
         'overview': 'An underdog in the fictional village of Anjanadri gains the superpowers of Lord Hanuman and rises to protect his people from villainous oppressors.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/4zB0O1v1W2x3y4z5A6b7C8d9E0.jpg',
+        'poster_path': '/51tqzRtKMMZEYUpSYkrUE7v9ehm.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/51tqzRtKMMZEYUpSYkrUE7v9ehm.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/r1yAZVNnn9BRv83q89cj4n239b6.jpg'
     },
     {
@@ -1287,7 +1334,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['khansaar', 'gangland kingdom', 'friendship vow', 'relentless mercenary', 'clan battle'],
         'keywords_str': 'khansaar, gangland kingdom, friendship vow, relentless mercenary',
         'overview': 'A gang leader makes a solemn promise to a dying friend and takes on other criminal clans in the fortified city-state of Khansaar.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/4zB0O1v1W2x3y4z5A6b7C8d9E0.jpg',
+        'poster_path': '/3PAjU0HwhTn5qrnkJ5TGIFQ3gbs.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/3PAjU0HwhTn5qrnkJ5TGIFQ3gbs.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/r1yAZVNnn9BRv83q89cj4n239b6.jpg'
     },
     {
@@ -1313,7 +1361,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['electoral reform', 'ias officer', 'political corruption', 'vigilante justice', 'system change'],
         'keywords_str': 'electoral reform, ias officer, political corruption, vigilante justice',
         'overview': 'An honest Indian Administrative Service officer battles corrupt politicians to reform the electoral governance system.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/4zB0O1v1W2x3y4z5A6b7C8d9E0.jpg',
+        'poster_path': '/tInvRAFHlaq4Fx0bAoVmvjf1ZGE.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/tInvRAFHlaq4Fx0bAoVmvjf1ZGE.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/r1yAZVNnn9BRv83q89cj4n239b6.jpg'
     },
     {
@@ -1339,7 +1388,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['haunted town', 'chanderi', 'headless ghost', 'horror comedy', 'stree'],
         'keywords_str': 'haunted town, chanderi, headless ghost, horror comedy, stree',
         'overview': 'The town of Chanderi is haunted once more, this time by a terrifying headless monster known as Sarkata.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/4zB0O1v1W2x3y4z5A6b7C8d9E0.jpg',
+        'poster_path': '/pFVNo8chKdSeSvBluJknlPIM43s.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/pFVNo8chKdSeSvBluJknlPIM43s.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/r1yAZVNnn9BRv83q89cj4n239b6.jpg'
     },
     {
@@ -1365,7 +1415,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['father and son', 'social justice', 'metro hijack', 'revenge', 'prison warden'],
         'keywords_str': 'father and son, social justice, metro hijack, revenge, prison warden',
         'overview': 'A man is driven by a personal vendetta to rectify the evils in society, while keeping a promise made years ago.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/4zB0O1v1W2x3y4z5A6b7C8d9E0.jpg',
+        'poster_path': '/jFt1gS4BGHlK8xt76Y81Alp4dbt.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/jFt1gS4BGHlK8xt76Y81Alp4dbt.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/r1yAZVNnn9BRv83q89cj4n239b6.jpg'
     },
     {
@@ -1391,7 +1442,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['cafe owner', 'past identity', 'gangland syndicate', 'lcu', 'violent retribution'],
         'keywords_str': 'cafe owner, past identity, gangland syndicate, lcu, violent retribution',
         'overview': 'Parthiban, a mild-mannered cafe owner in Kashmir, gets drawn into a violent underworld after stopping a gang of robbers, drawing the attention of dangerous criminals who claim he is someone else.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/4zB0O1v1W2x3y4z5A6b7C8d9E0.jpg',
+        'poster_path': '/yBSzZk5oHdxR7FVeHQ4Vs8rjdzg.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/yBSzZk5oHdxR7FVeHQ4Vs8rjdzg.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/r1yAZVNnn9BRv83q89cj4n239b6.jpg'
     },
     {
@@ -1417,7 +1469,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['guna caves', 'devils kitchen', 'friendship', 'rescue mission', 'true story'],
         'keywords_str': 'guna caves, devils kitchen, friendship, rescue mission, true story',
         'overview': 'A group of friends from a small town in Kochi embark on a vacation to Kodaikanal, where one of them falls into the treacherous Guna Caves, triggering an extraordinary rescue operation.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/4zB0O1v1W2x3y4z5A6b7C8d9E0.jpg',
+        'poster_path': '/bswrtewwthpsh6nABiqKevU4UBI.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/bswrtewwthpsh6nABiqKevU4UBI.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/r1yAZVNnn9BRv83q89cj4n239b6.jpg'
     },
     {
@@ -1443,7 +1496,8 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['bhoota kola', 'demigod', 'forest conflict', 'folklore', 'divine wrath'],
         'keywords_str': 'bhoota kola, demigod, forest conflict, folklore, divine wrath',
         'overview': 'When greed paves the way for betrayal, scheming and murder, a young tribal man reincarnates the divine spirit of Panjurli Daiva to seek retribution against an evil feudal lord.',
-        'poster_url': 'https://image.tmdb.org/t/p/w500/4zB0O1v1W2x3y4z5A6b7C8d9E0.jpg',
+        'poster_path': '/jIsKmkxMzdCZ0Ux1GVSnu8m6Na6.jpg',
+        'poster_url': 'https://image.tmdb.org/t/p/w500/jIsKmkxMzdCZ0Ux1GVSnu8m6Na6.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/r1yAZVNnn9BRv83q89cj4n239b6.jpg'
     },
     {
@@ -1469,6 +1523,7 @@ WORLD_CINEMA_REGISTRY = [
         'keywords': ['atomic bomb', 'manhattan project', 'physicist', 'trinity test', 'quantum mechanics', 'moral conflict'],
         'keywords_str': 'atomic bomb, manhattan project, physicist, trinity test, quantum mechanics',
         'overview': 'The story of J. Robert Oppenheimers role in the development of the atomic bomb during World War II and the intense moral and political fallout that followed.',
+        'poster_path': '/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg',
         'poster_url': 'https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg',
         'backdrop_url': 'https://image.tmdb.org/t/p/original/fm6KqXpk3M2HVveHwCrBSSBaO0V.jpg'
     }
